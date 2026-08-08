@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Workbench | Computer Assembly Simulator C01</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#07152c;
+    --panel:#0d2447;
+    --panel2:#102d57;
+    --cyan:#32d7ff;
+    --orange:#ff9f1a;
+    --green:#37df83;
+    --red:#ff6262;
+    --white:#f5f9ff;
+    --muted:#abc1dd;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top right,#123e70,transparent 30%),
+        linear-gradient(135deg,#061329,#071c39);
+    color:var(--white);
+    font-family:'Poppins',sans-serif;
+}
+
+header{
+    min-height:82px;
+    padding:14px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    background:rgba(5,18,40,.96);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.brand h1{
+    font:800 1.25rem 'Montserrat',sans-serif;
+}
+
+.brand span{
+    color:var(--cyan);
+}
+
+.brand p{
+    color:var(--muted);
+    font-size:.76rem;
+    margin-top:3px;
+}
+
+.student{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#102a50;
+    border-radius:16px;
+    padding:9px 14px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:#173b6d;
+    font-size:1.4rem;
+}
+
+.student strong{
+    display:block;
+    font-size:.87rem;
+}
+
+.student small{
+    color:#aac2df;
+    font-size:.7rem;
+}
+
+main{
+    width:min(1500px,100%);
+    margin:auto;
+    padding:20px;
+}
+
+.statusbar{
+    display:grid;
+    grid-template-columns:1.4fr repeat(3,.65fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.status-card{
+    background:rgba(13,36,71,.95);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:17px;
+    padding:14px 16px;
+}
+
+.status-card small{
+    display:block;
+    color:var(--muted);
+    font-size:.72rem;
+    margin-bottom:4px;
+}
+
+.status-card strong{
+    font-family:'Montserrat';
+    font-size:1rem;
+}
+
+#score{
+    color:var(--green);
+}
+
+#mistakes{
+    color:#ff8585;
+}
+
+#timer{
+    color:var(--cyan);
+}
+
+.progress-wrap{
+    margin-top:8px;
+    height:8px;
+    background:#06152d;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+#progress{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,var(--orange),var(--green));
+    transition:.4s;
+}
+
+.workspace{
+    display:grid;
+    grid-template-columns:280px 1fr 310px;
+    gap:16px;
+}
+
+.panel{
+    background:rgba(13,36,71,.95);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:22px;
+    overflow:hidden;
+}
+
+.panel-title{
+    padding:15px 17px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.panel-title h2{
+    font:700 .95rem 'Montserrat';
+}
+
+.panel-title p{
+    font-size:.7rem;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* COMPONENTS */
+
+.parts{
+    padding:13px;
+    display:grid;
+    gap:10px;
+}
+
+.part{
+    padding:12px;
+    min-height:69px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    background:#102d57;
+    border:2px solid transparent;
+    border-radius:15px;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+    transition:.2s;
+}
+
+.part:hover{
+    border-color:#2a72a9;
+    transform:translateY(-2px);
+}
+
+.part.active{
+    border-color:var(--orange);
+    box-shadow:0 0 0 3px rgba(255,159,26,.15);
+}
+
+.part.installed{
+    opacity:.42;
+    pointer-events:none;
+    border-color:var(--green);
+}
+
+.part-icon{
+    min-width:45px;
+    height:45px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:#071b38;
+    font-size:1.5rem;
+}
+
+.part strong{
+    font-size:.78rem;
+    display:block;
+}
+
+.part small{
+    display:block;
+    color:#a8bfda;
+    font-size:.65rem;
+    margin-top:2px;
+}
+
+/* WORKBENCH */
+
+.bench{
+    min-height:650px;
+    padding:16px;
+    background:
+        linear-gradient(rgba(5,18,40,.20),rgba(5,18,40,.25)),
+        repeating-linear-gradient(
+            45deg,
+            #17385d,
+            #17385d 18px,
+            #193d64 18px,
+            #193d64 36px
+        );
+}
+
+.bench-label{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:13px;
+    font-size:.72rem;
+    color:#c6d8ee;
+}
+
+.case{
+    width:min(720px,100%);
+    min-height:570px;
+    margin:auto;
+    border:7px solid #263b50;
+    border-radius:24px;
+    background:#101b28;
+    box-shadow:
+        inset 0 0 0 3px #090f17,
+        0 18px 40px rgba(0,0,0,.35);
+    position:relative;
+    padding:28px;
+}
+
+.case::before{
+    content:"PC CASE • SIDE PANEL REMOVED";
+    position:absolute;
+    top:7px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:.58rem;
+    color:#7890a8;
+    letter-spacing:1.5px;
+}
+
+.motherboard{
+    position:relative;
+    width:78%;
+    height:455px;
+    border-radius:17px;
+    background:
+        linear-gradient(135deg,rgba(255,255,255,.03),transparent),
+        #174c48;
+    border:4px solid #246a63;
+    box-shadow:inset 0 0 0 2px #0d302e;
+}
+
+.mobo-title{
+    position:absolute;
+    bottom:7px;
+    left:10px;
+    font-size:.55rem;
+    color:#8fc4bb;
+}
+
+/* DROP SLOTS */
+
+.slot{
+    position:absolute;
+    border:2px dashed rgba(255,255,255,.35);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#cce4e0;
+    font-size:.58rem;
+    padding:4px;
+    transition:.2s;
+}
+
+.slot.ready{
+    border-color:var(--orange);
+    background:rgba(255,159,26,.12);
+    animation:pulse 1s infinite alternate;
+}
+
+.slot.correct{
+    border-style:solid;
+    border-color:var(--green);
+    background:rgba(55,223,131,.16);
+    color:white;
+}
+
+.slot.wrong{
+    border-color:var(--red);
+    background:rgba(255,98,98,.18);
+}
+
+@keyframes pulse{
+    from{box-shadow:0 0 0 rgba(255,159,26,0);}
+    to{box-shadow:0 0 18px rgba(255,159,26,.5);}
+}
+
+.cpu-slot{
+    width:95px;
+    height:95px;
+    top:75px;
+    left:165px;
+}
+
+.ram-slot{
+    width:42px;
+    height:185px;
+    top:55px;
+    right:65px;
+}
+
+.m2-slot{
+    width:150px;
+    height:37px;
+    top:270px;
+    left:165px;
+}
+
+.gpu-slot{
+    width:235px;
+    height:42px;
+    top:345px;
+    left:75px;
+}
+
+.psu-slot{
+    width:145px;
+    height:115px;
+    bottom:25px;
+    right:-170px;
+}
+
+.drive-slot{
+    width:145px;
+    height:80px;
+    top:30px;
+    right:-170px;
+}
+
+.installed-icon{
+    font-size:1.25rem;
+    display:block;
+}
+
+/* INSTRUCTION */
+
+.instruction{
+    padding:17px;
+}
+
+.step-number{
+    display:inline-flex;
+    padding:7px 11px;
+    border-radius:999px;
+    background:var(--orange);
+    color:#17213d;
+    font-weight:800;
+    font-size:.7rem;
+    margin-bottom:12px;
+}
+
+#instructionTitle{
+    font:700 1.05rem 'Montserrat';
+    line-height:1.35;
+    margin-bottom:8px;
+}
+
+#instructionText{
+    font-size:.78rem;
+    line-height:1.7;
+    color:#bed1e8;
+}
+
+.tip{
+    margin-top:15px;
+    padding:12px;
+    border-radius:14px;
+    background:#09213f;
+    border-left:4px solid var(--cyan);
+}
+
+.tip strong{
+    display:block;
+    font-size:.72rem;
+    color:var(--cyan);
+    margin-bottom:4px;
+}
+
+.tip p{
+    color:#a9c0dc;
+    font-size:.68rem;
+    line-height:1.55;
+}
+
+.feedback{
+    margin-top:14px;
+    min-height:60px;
+    padding:12px;
+    border-radius:14px;
+    background:#071b35;
+    font-size:.72rem;
+    line-height:1.55;
+    color:#bdd1e8;
+}
+
+.feedback.success{
+    border:1px solid var(--green);
+    color:#a9ffd0;
+}
+
+.feedback.error{
+    border:1px solid var(--red);
+    color:#ffc0c0;
+}
+
+.controls{
+    padding:0 17px 17px;
+    display:grid;
+    gap:9px;
+}
+
+button{
+    border:0;
+    border-radius:13px;
+    padding:12px;
+    cursor:pointer;
+    font:700 .75rem 'Poppins';
+}
+
+.reset{
+    background:#18375e;
+    color:white;
+}
+
+.logout{
+    background:#301b2a;
+    color:#ffb4b4;
+}
+
+.complete-screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:rgba(3,10,24,.93);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.complete-card{
+    width:min(500px,100%);
+    text-align:center;
+    background:#0e294f;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:25px;
+    padding:35px;
+}
+
+.complete-card .trophy{
+    font-size:4rem;
+}
+
+.complete-card h2{
+    font:800 1.8rem 'Montserrat';
+    color:var(--green);
+    margin:12px 0;
+}
+
+.complete-card p{
+    color:#c2d5eb;
+    line-height:1.7;
+    font-size:.85rem;
+}
+
+.complete-card button{
+    width:100%;
+    margin-top:18px;
+    background:var(--orange);
+    color:#17213d;
+}
+
+@media(max-width:1100px){
+    .workspace{
+        grid-template-columns:230px 1fr;
+    }
+
+    .instruction-panel{
+        grid-column:1/-1;
+    }
+}
+
+@media(max-width:760px){
+
+    header{
+        position:relative;
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .statusbar{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .status-card:first-child{
+        grid-column:1/-1;
+    }
+
+    .workspace{
+        grid-template-columns:1fr;
+    }
+
+    .parts{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .instruction-panel{
+        grid-column:auto;
+    }
+
+    .bench{
+        min-height:520px;
+        overflow:auto;
+    }
+
+    .case{
+        min-width:600px;
+        transform-origin:top left;
+    }
+}
+
+@media(max-width:480px){
+    main{
+        padding:10px;
+    }
+
+    .parts{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .part{
+        padding:9px;
+    }
+
+    .part-icon{
+        min-width:38px;
+        height:38px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+    <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
+    <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer</p>
+</div>
+
+<div class="student">
+    <div class="avatar">👨‍💻</div>
+    <div>
+        <strong id="studentName">Pelajar</strong>
+        <small id="studentInfo">ID • Kelas</small>
+    </div>
+</div>
+
+</header>
+
+<main>
+
+<section class="statusbar">
+
+<div class="status-card">
+    <small>KEMAJUAN PEMASANGAN</small>
+    <strong id="progressText">0 / 6 komponen</strong>
+    <div class="progress-wrap">
+        <div id="progress"></div>
+    </div>
+</div>
+
+<div class="status-card">
+    <small>SKOR</small>
+    <strong id="score">0</strong>
+</div>
+
+<div class="status-card">
+    <small>KESALAHAN</small>
+    <strong id="mistakes">0</strong>
+</div>
+
+<div class="status-card">
+    <small>MASA</small>
+    <strong id="timer">00:00</strong>
+</div>
+
+</section>
+
+
+<section class="workspace">
+
+<!-- COMPONENT PANEL -->
+
+<div class="panel">
+
+<div class="panel-title">
+    <h2>🧰 Komponen</h2>
+    <p>Pilih komponen mengikut arahan.</p>
+</div>
+
+<div class="parts">
+
+<div class="part" data-part="cpu">
+    <div class="part-icon">🧠</div>
+    <div>
+        <strong>CPU</strong>
+        <small>Processor</small>
+    </div>
+</div>
+
+<div class="part" data-part="ram">
+    <div class="part-icon">▥</div>
+    <div>
+        <strong>RAM</strong>
+        <small>Memory Module</small>
+    </div>
+</div>
+
+<div class="part" data-part="m2">
+    <div class="part-icon">▬</div>
+    <div>
+        <strong>M.2 NVMe</strong>
+        <small>SSD Storage</small>
+    </div>
+</div>
+
+<div class="part" data-part="gpu">
+    <div class="part-icon">🎮</div>
+    <div>
+        <strong>GPU</strong>
+        <small>Graphics Card</small>
+    </div>
+</div>
+
+<div class="part" data-part="ssd">
+    <div class="part-icon">💾</div>
+    <div>
+        <strong>SSD SATA</strong>
+        <small>2.5" Drive</small>
+    </div>
+</div>
+
+<div class="part" data-part="psu">
+    <div class="part-icon">🔋</div>
+    <div>
+        <strong>PSU</strong>
+        <small>Power Supply</small>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- WORKBENCH -->
+
+<div class="panel">
+
+<div class="panel-title">
+    <h2>🔧 Workbench Pemasangan</h2>
+    <p>Klik komponen kemudian klik slot pemasangan yang betul.</p>
+</div>
+
+<div class="bench">
+
+<div class="bench-label">
+    <span>⚠️ Pastikan pemasangan mengikut urutan.</span>
+    <span>ESD SAFE WORK AREA</span>
+</div>
+
+<div class="case">
+
+<div class="motherboard">
+
+<div
+class="slot cpu-slot"
+data-slot="cpu">
+CPU SOCKET
+</div>
+
+<div
+class="slot ram-slot"
+data-slot="ram">
+RAM<br>SLOT
+</div>
+
+<div
+class="slot m2-slot"
+data-slot="m2">
+M.2 NVMe SLOT
+</div>
+
+<div
+class="slot gpu-slot"
+data-slot="gpu">
+PCIe x16 • GPU
+</div>
+
+<div
+class="slot drive-slot"
+data-slot="ssd">
+SSD 2.5"
+</div>
+
+<div
+class="slot psu-slot"
+data-slot="psu">
+PSU BAY
+</div>
+
+<div class="mobo-title">
+ATX MOTHERBOARD
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- INSTRUCTION -->
+
+<div class="panel instruction-panel">
+
+<div class="panel-title">
+    <h2>📋 Arahan Teknikal</h2>
+    <p>Ikuti setiap langkah pemasangan.</p>
+</div>
+
+<div class="instruction">
+
+<div class="step-number" id="stepNumber">
+LANGKAH 1 / 6
+</div>
+
+<h3 id="instructionTitle">
+Pasang CPU
+</h3>
+
+<p id="instructionText">
+Pilih CPU daripada panel komponen dan pasangkan
+pada CPU Socket motherboard.
+</p>
+
+<div class="tip">
+<strong>💡 TIP JURUTEKNIK</strong>
+<p id="tipText">
+Pastikan tanda segi tiga pada CPU sejajar dengan
+penanda pada socket sebelum CPU dikunci.
+</p>
+</div>
+
+<div class="feedback" id="feedback">
+👨‍🔧 Sistem bersedia. Mulakan pemasangan.
+</div>
+
+</div>
+
+<div class="controls">
+
+<button class="reset" id="resetBtn">
+↻ MULAKAN SEMULA
+</button>
+
+<button class="logout" id="logoutBtn">
+🚪 LOGOUT
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- COMPLETE -->
+
+<div class="complete-screen" id="completeScreen">
+
+<div class="complete-card">
+
+<div class="trophy">🏆</div>
+
+<h2>SIMULASI SELESAI!</h2>
+
+<p id="finalResult">
+Tahniah! Anda telah berjaya memasang semua komponen.
+</p>
+
+<button onclick="restartSimulation()">
+🔄 ULANG SIMULASI
+</button>
+
+</div>
+</div>
+
+
+<script>
+
+const STORAGE_KEY = "c01_assembly_student";
+const RESULT_KEY = "c01_assembly_result";
+
+const studentData =
+JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+
+if(!studentData){
+    window.location.href = "index.html";
+}
+
+if(studentData){
+
+document.getElementById("studentName").textContent =
+studentData.name;
+
+document.getElementById("studentInfo").textContent =
+studentData.id + " • " + studentData.className;
+
+}
+
+const steps = [
+
+{
+part:"cpu",
+title:"Pasang CPU",
+text:"Pilih CPU daripada panel komponen dan pasangkan pada CPU Socket motherboard.",
+tip:"Pastikan tanda segi tiga pada CPU sejajar dengan penanda pada socket sebelum CPU dikunci.",
+icon:"🧠"
+},
+
+{
+part:"ram",
+title:"Pasang RAM",
+text:"Pilih modul RAM dan pasangkan pada slot RAM motherboard.",
+tip:"Buka pengunci slot dan pastikan takuk RAM sejajar dengan slot sebelum ditekan.",
+icon:"▥"
+},
+
+{
+part:"m2",
+title:"Pasang M.2 NVMe SSD",
+text:"Pilih M.2 NVMe dan pasangkan pada slot M.2 motherboard.",
+tip:"Masukkan M.2 secara menyerong sebelum ditekan dan dikunci dengan skru.",
+icon:"▬"
+},
+
+{
+part:"gpu",
+title:"Pasang Graphics Card",
+text:"Pilih GPU dan pasangkan pada slot PCIe x16 motherboard.",
+tip:"Pastikan pengunci PCIe terbuka dan kad grafik masuk sepenuhnya ke slot.",
+icon:"🎮"
+},
+
+{
+part:"ssd",
+title:"Pasang SSD SATA",
+text:"Pilih SSD SATA 2.5 inci dan pasangkan pada ruang storan casing.",
+tip:"SSD SATA perlu disambungkan kepada kabel SATA Data dan SATA Power pada fasa sambungan kabel.",
+icon:"💾"
+},
+
+{
+part:"psu",
+title:"Pasang Power Supply",
+text:"Pilih PSU dan pasangkan pada PSU Bay di bahagian bawah casing.",
+tip:"Pastikan kipas PSU mempunyai aliran udara yang sesuai dan PSU dipasang dengan skru.",
+icon:"🔋"
+}
+
+];
+
+let currentStep = 0;
+let score = 0;
+let mistakes = 0;
+let selectedPart = null;
+
+let startTime = Date.now();
+let timerInterval;
+
+const parts =
+document.querySelectorAll(".part");
+
+const slots =
+document.querySelectorAll(".slot");
+
+const feedback =
+document.getElementById("feedback");
+
+function updateInstruction(){
+
+const step = steps[currentStep];
+
+if(!step) return;
+
+document.getElementById("stepNumber").textContent =
+"LANGKAH " + (currentStep + 1) + " / " + steps.length;
+
+document.getElementById("instructionTitle").textContent =
+step.title;
+
+document.getElementById("instructionText").textContent =
+step.text;
+
+document.getElementById("tipText").textContent =
+step.tip;
+
+slots.forEach(slot=>{
+    slot.classList.remove("ready");
+
+    if(
+        slot.dataset.slot === step.part &&
+        !slot.classList.contains("correct")
+    ){
+        slot.classList.add("ready");
+    }
+});
+
+}
+
+parts.forEach(part=>{
+
+part.addEventListener("click",()=>{
+
+if(part.classList.contains("installed")){
+    return;
+}
+
+parts.forEach(p=>p.classList.remove("active"));
+
+part.classList.add("active");
+
+selectedPart = part.dataset.part;
+
+feedback.className = "feedback";
+
+feedback.textContent =
+"🔧 " +
+part.querySelector("strong").textContent +
+" dipilih. Sekarang pilih lokasi pemasangan.";
+
+});
+
+});
+
+
+slots.forEach(slot=>{
+
+slot.addEventListener("click",()=>{
+
+if(slot.classList.contains("correct")){
+    return;
+}
+
+if(!selectedPart){
+
+feedback.className =
+"feedback error";
+
+feedback.textContent =
+"⚠️ Pilih komponen terlebih dahulu.";
+
+return;
+}
+
+const expectedPart =
+steps[currentStep].part;
+
+const selectedSlot =
+slot.dataset.slot;
+
+if(
+selectedPart === expectedPart &&
+selectedSlot === expectedPart
+){
+
+installCorrect(slot);
+
+}else{
+
+installWrong(slot);
+
+}
+
+});
+
+});
+
+
+function installCorrect(slot){
+
+const step =
+steps[currentStep];
+
+slot.classList.remove("ready");
+
+slot.classList.add("correct");
+
+slot.innerHTML =
+'<span class="installed-icon">' +
+step.icon +
+'</span>TERPASANG';
+
+const selectedElement =
+document.querySelector(
+'.part[data-part="' +
+selectedPart +
+'"]'
+);
+
+selectedElement.classList.remove("active");
+
+selectedElement.classList.add("installed");
+
+score += 100;
+
+feedback.className =
+"feedback success";
+
+feedback.textContent =
+"✅ BETUL! " +
+step.title +
+" berjaya.";
+
+selectedPart = null;
+
+currentStep++;
+
+updateStatus();
+
+if(currentStep >= steps.length){
+
+finishSimulation();
+
+}else{
+
+setTimeout(()=>{
+
+feedback.className =
+"feedback";
+
+feedback.textContent =
+"➡️ Teruskan ke langkah seterusnya.";
+
+updateInstruction();
+
+},650);
+
+}
+
+}
+
+
+function installWrong(slot){
+
+mistakes++;
+
+score = Math.max(0,score - 20);
+
+slot.classList.add("wrong");
+
+feedback.className =
+"feedback error";
+
+feedback.textContent =
+"❌ Pemasangan tidak tepat. Semak arahan dan cuba lagi.";
+
+updateStatus();
+
+setTimeout(()=>{
+slot.classList.remove("wrong");
+},500);
+
+}
+
+
+function updateStatus(){
+
+document.getElementById("score").textContent =
+score;
+
+document.getElementById("mistakes").textContent =
+mistakes;
+
+document.getElementById("progressText").textContent =
+currentStep +
+" / " +
+steps.length +
+" komponen";
+
+document.getElementById("progress").style.width =
+(currentStep / steps.length * 100) + "%";
+
+}
+
+
+function startTimer(){
+
+timerInterval =
+setInterval(()=>{
+
+const seconds =
+Math.floor(
+(Date.now() - startTime) / 1000
+);
+
+const min =
+String(
+Math.floor(seconds / 60)
+).padStart(2,"0");
+
+const sec =
+String(
+seconds % 60
+).padStart(2,"0");
+
+document.getElementById("timer").textContent =
+min + ":" + sec;
+
+},1000);
+
+}
+
+
+function finishSimulation(){
+
+clearInterval(timerInterval);
+
+document.getElementById("progress").style.width =
+"100%";
+
+const time =
+document.getElementById("timer").textContent;
+
+const accuracy =
+Math.max(
+0,
+Math.round(
+(steps.length /
+(steps.length + mistakes)) * 100
+)
+);
+
+const result = {
+
+name:studentData.name,
+id:studentData.id,
+className:studentData.className,
+score:score,
+mistakes:mistakes,
+accuracy:accuracy,
+time:time,
+completedAt:new Date().toISOString()
+
+};
+
+localStorage.setItem(
+RESULT_KEY,
+JSON.stringify(result)
+);
+
+document.getElementById("finalResult").innerHTML =
+
+"Tahniah <strong>" +
+studentData.name +
+"</strong>!<br><br>" +
+
+"Skor: <strong>" +
+score +
+"</strong><br>" +
+
+"Ketepatan: <strong>" +
+accuracy +
+"%</strong><br>" +
+
+"Kesalahan: <strong>" +
+mistakes +
+"</strong><br>" +
+
+"Masa: <strong>" +
+time +
+"</strong>";
+
+document.getElementById(
+"completeScreen"
+).style.display =
+"flex";
+
+}
+
+
+function restartSimulation(){
+
+location.reload();
+
+}
+
+
+document.getElementById(
+"resetBtn"
+).addEventListener(
+"click",
+()=>{
+
+if(
+confirm(
+"Mulakan semula simulasi?"
+)
+){
+
+location.reload();
+
+}
+
+});
+
+
+document.getElementById(
+"logoutBtn"
+).addEventListener(
+"click",
+()=>{
+
+if(
+confirm(
+"Anda pasti mahu logout?"
+)
+){
+
+localStorage.removeItem(
+STORAGE_KEY
+);
+
+window.location.href =
+"index.html";
+
+}
+
+});
+
+
+updateInstruction();
+
+updateStatus();
+
+startTimer();
+
+</script>
+
+</body>
+</html>
