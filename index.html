@@ -1,1 +1,460 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computer Assembly Simulator C01</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      min-height:100vh;
+      font-family:'Poppins',sans-serif;
+      background:
+        radial-gradient(circle at top left,#183d78 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#0d5b8f 0%,transparent 35%),
+        linear-gradient(135deg,#06152e,#081f43 55%,#07172e);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .app{
+      width:min(1200px,100%);
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      background:rgba(10,28,60,.94);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:30px;
+      overflow:hidden;
+      box-shadow:0 25px 70px rgba(0,0,0,.45);
+    }
+
+    .hero{
+      padding:60px;
+      position:relative;
+      min-height:660px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      background:
+        linear-gradient(rgba(3,14,34,.45),rgba(3,14,34,.85)),
+        linear-gradient(135deg,#0b4e87,#071d40);
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      padding:9px 15px;
+      border-radius:999px;
+      background:#ff9f1a;
+      color:#17213d;
+      font-weight:800;
+      font-size:.84rem;
+      margin-bottom:25px;
+    }
+
+    h1{
+      font-family:'Montserrat',sans-serif;
+      font-size:clamp(2.3rem,5vw,4.4rem);
+      line-height:1.04;
+      margin-bottom:20px;
+      letter-spacing:-1.5px;
+    }
+
+    h1 span{
+      color:#38d8ff;
+    }
+
+    .subtitle{
+      font-size:1.07rem;
+      line-height:1.8;
+      max-width:650px;
+      color:#d8e7ff;
+      margin-bottom:32px;
+    }
+
+    .features{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .feature{
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.09);
+    }
+
+    .feature strong{
+      display:block;
+      margin-bottom:4px;
+      color:#fff;
+    }
+
+    .feature small{
+      color:#bcd0ec;
+    }
+
+    .login-side{
+      background:#f7f9fc;
+      color:#17213d;
+      padding:55px 45px;
+      display:flex;
+      align-items:center;
+    }
+
+    .login-box{
+      width:100%;
+    }
+
+    .icon{
+      width:74px;
+      height:74px;
+      display:grid;
+      place-items:center;
+      border-radius:22px;
+      background:#e6f6ff;
+      font-size:2.2rem;
+      margin-bottom:18px;
+    }
+
+    .login-box h2{
+      font-family:'Montserrat',sans-serif;
+      font-size:2rem;
+      color:#0b2c56;
+      margin-bottom:7px;
+    }
+
+    .login-box > p{
+      color:#68778c;
+      margin-bottom:26px;
+    }
+
+    .field{
+      margin-bottom:17px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:7px;
+      font-weight:700;
+      font-size:.93rem;
+      color:#24364c;
+    }
+
+    input{
+      width:100%;
+      border:2px solid #dce4ef;
+      background:#fff;
+      border-radius:14px;
+      padding:15px 16px;
+      font:inherit;
+      color:#17213d;
+      outline:none;
+      transition:.2s;
+    }
+
+    input:focus{
+      border-color:#209bd8;
+      box-shadow:0 0 0 4px rgba(32,155,216,.12);
+    }
+
+    button{
+      border:0;
+      width:100%;
+      padding:16px;
+      border-radius:15px;
+      font:700 1rem 'Poppins',sans-serif;
+      cursor:pointer;
+      background:linear-gradient(90deg,#ff9914,#ffb52d);
+      color:#17213d;
+      transition:.2s;
+      margin-top:7px;
+    }
+
+    button:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(255,159,26,.25);
+    }
+
+    .message{
+      min-height:26px;
+      margin-top:14px;
+      font-size:.9rem;
+      font-weight:600;
+      text-align:center;
+    }
+
+    .error{
+      color:#d73737;
+    }
+
+    .success{
+      color:#17864b;
+    }
+
+    .footer{
+      margin-top:22px;
+      color:#8490a0;
+      font-size:.78rem;
+      text-align:center;
+      line-height:1.6;
+    }
+
+    @media(max-width:900px){
+      .app{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        min-height:auto;
+        padding:40px 30px;
+      }
+
+      .login-side{
+        padding:40px 30px;
+      }
+
+      .features{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:560px){
+      body{
+        padding:12px;
+      }
+
+      .app{
+        border-radius:22px;
+      }
+
+      .hero,
+      .login-side{
+        padding:30px 20px;
+      }
+
+      .features{
+        grid-template-columns:1fr;
+      }
+
+      h1{
+        font-size:2.35rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <section class="hero">
+    <div class="tag">🖥️ TVET • C01 INTERACTIVE SIMULATOR</div>
+
+    <h1>
+      COMPUTER<br>
+      <span>ASSEMBLY</span><br>
+      SIMULATOR
+    </h1>
+
+    <p class="subtitle">
+      Simulasi interaktif pemasangan komputer untuk membantu pelajar
+      mempelajari urutan pemasangan perkakasan secara selamat,
+      sistematik dan praktikal.
+    </p>
+
+    <div class="features">
+
+      <div class="feature">
+        <strong>🔧 Pemasangan Komponen</strong>
+        <small>CPU, RAM, SSD, PSU, GPU dan perkakasan utama.</small>
+      </div>
+
+      <div class="feature">
+        <strong>🔌 Sambungan Kabel</strong>
+        <small>ATX, CPU Power, SATA dan sambungan motherboard.</small>
+      </div>
+
+      <div class="feature">
+        <strong>✅ Semakan Automatik</strong>
+        <small>Sistem mengesan pemasangan betul atau salah.</small>
+      </div>
+
+      <div class="feature">
+        <strong>🏆 Skor Pelajar</strong>
+        <small>Catat masa, kesalahan dan keputusan simulasi.</small>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="login-side">
+
+    <div class="login-box">
+
+      <div class="icon">👨‍💻</div>
+
+      <h2>Login Pelajar</h2>
+
+      <p>
+        Masukkan maklumat anda sebelum memulakan simulasi.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label for="studentName">Nama Penuh Pelajar</label>
+          <input
+            id="studentName"
+            type="text"
+            placeholder="Contoh: Nurul Farhana Ahmad"
+            autocomplete="name"
+          >
+        </div>
+
+        <div class="field">
+          <label for="studentId">ID Pelajar</label>
+          <input
+            id="studentId"
+            type="text"
+            placeholder="Contoh: A12345"
+          >
+        </div>
+
+        <div class="field">
+          <label for="studentClass">Kelas</label>
+          <input
+            id="studentClass"
+            type="text"
+            placeholder="Contoh: SKM T3 / Kelas A"
+          >
+        </div>
+
+        <button type="submit">
+          🚀 MULA SIMULASI
+        </button>
+
+        <div id="message" class="message"></div>
+
+      </form>
+
+      <div class="footer">
+        COMPUTER SYSTEM SET-UP • IT-020-3:2013-C01<br>
+        Computer Assembly Simulator
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+const STORAGE_KEY = "c01_assembly_student";
+
+const loginForm = document.getElementById("loginForm");
+const studentName = document.getElementById("studentName");
+const studentId = document.getElementById("studentId");
+const studentClass = document.getElementById("studentClass");
+const message = document.getElementById("message");
+
+function clean(value){
+  return value.trim().replace(/\s+/g," ");
+}
+
+function showMessage(text,type){
+  message.textContent = text;
+  message.className = "message " + type;
+}
+
+const savedStudent = localStorage.getItem(STORAGE_KEY);
+
+if(savedStudent){
+  try{
+    const student = JSON.parse(savedStudent);
+
+    studentName.value = student.name || "";
+    studentId.value = student.id || "";
+    studentClass.value = student.className || "";
+  }catch(error){
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+loginForm.addEventListener("submit",function(event){
+
+  event.preventDefault();
+
+  const name = clean(studentName.value);
+  const id = clean(studentId.value);
+  const className = clean(studentClass.value);
+
+  if(!name || !id || !className){
+    showMessage(
+      "⚠️ Sila lengkapkan nama, ID pelajar dan kelas.",
+      "error"
+    );
+    return;
+  }
+
+  if(name.length < 5){
+    showMessage(
+      "⚠️ Sila masukkan nama penuh pelajar.",
+      "error"
+    );
+    return;
+  }
+
+  if(id.length < 3){
+    showMessage(
+      "⚠️ ID pelajar tidak lengkap.",
+      "error"
+    );
+    return;
+  }
+
+  const studentData = {
+    name:name,
+    id:id,
+    className:className,
+    loginTime:new Date().toISOString(),
+    simulator:"COMPUTER-ASSEMBLY-SIMULATOR-C01"
+  };
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(studentData)
+  );
+
+  showMessage(
+    "✅ Login berjaya. Membuka simulasi...",
+    "success"
+  );
+
+  setTimeout(function(){
+    window.location.href = "workbench.html";
+  },700);
+
+});
+
+</script>
+
+</body>
+</html>
