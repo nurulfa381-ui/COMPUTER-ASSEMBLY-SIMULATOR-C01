@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Workbench V2 | Computer Assembly Simulator C01</title>
+<title>Workbench V3A | Computer Assembly Simulator C01</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,6 @@
   --white:#f5f9ff;
   --muted:#abc1dd;
   --board:#145a52;
-  --board2:#0f403b;
 }
 
 body{
@@ -177,7 +176,7 @@ main{
   color:var(--muted);
 }
 
-/* PART LIST */
+/* PARTS */
 
 .parts{
   padding:13px;
@@ -186,7 +185,7 @@ main{
 }
 
 .part{
-  min-height:78px;
+  min-height:76px;
   padding:10px 12px;
   display:flex;
   align-items:center;
@@ -236,8 +235,6 @@ main{
   position:relative;
 }
 
-/* mini hardware illustrations */
-
 .cpu-mini{
   width:42px;
   height:42px;
@@ -252,6 +249,65 @@ main{
   position:absolute;
   font:bold 8px Montserrat;
   color:#25313c;
+}
+
+.thermal-mini{
+  width:20px;
+  height:43px;
+  border-radius:6px;
+  background:#d7dadd;
+  border:3px solid #8d979f;
+  position:relative;
+}
+
+.thermal-mini:before{
+  content:"";
+  position:absolute;
+  width:10px;
+  height:10px;
+  top:-9px;
+  left:2px;
+  background:#68727a;
+  border-radius:2px;
+}
+
+.thermal-mini:after{
+  content:"PASTE";
+  position:absolute;
+  left:-4px;
+  bottom:8px;
+  transform:rotate(-90deg);
+  font:bold 6px Montserrat;
+  color:#4a545b;
+}
+
+.cooler-mini{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#252e35;
+  border:5px solid #707d86;
+  position:relative;
+}
+
+.cooler-mini:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:50%;
+  background:#8a959d;
+}
+
+.cooler-mini:after{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:30px;
+  background:#252e35;
+  left:17px;
+  top:4px;
+  transform:rotate(45deg);
+  box-shadow:0 0 0 transparent;
 }
 
 .ram-mini{
@@ -400,7 +456,7 @@ main{
 /* BENCH */
 
 .bench{
-  min-height:700px;
+  min-height:720px;
   padding:16px;
   overflow:auto;
   background:
@@ -431,8 +487,7 @@ main{
   padding:34px 36px;
   border-radius:22px;
   border:8px solid #263847;
-  background:
-    linear-gradient(145deg,#111a22,#0a1117);
+  background:linear-gradient(145deg,#111a22,#0a1117);
   box-shadow:
     inset 0 0 0 3px #05090d,
     0 20px 45px rgba(0,0,0,.35);
@@ -466,8 +521,6 @@ main{
     inset 0 0 0 2px #0c302d,
     0 10px 22px rgba(0,0,0,.28);
 }
-
-/* motherboard decorative traces */
 
 .trace{
   position:absolute;
@@ -671,6 +724,24 @@ main{
   background:rgba(28,54,50,.4);
 }
 
+.thermal-slot{
+  width:54px;
+  height:54px;
+  left:192px;
+  top:123px;
+  border-radius:50%;
+  z-index:8;
+}
+
+.cooler-slot{
+  width:135px;
+  height:135px;
+  left:151px;
+  top:82px;
+  border-radius:50%;
+  z-index:7;
+}
+
 .ram-slot{
   width:28px;
   height:188px;
@@ -756,7 +827,44 @@ main{
   font:bold 9px Montserrat;
 }
 
-/* instruction */
+.thermal-installed{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#d8dadd;
+  border:2px solid #f3f3f3;
+  box-shadow:0 0 10px rgba(255,255,255,.3);
+}
+
+.cooler-installed{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:#252d34;
+  border:6px solid #75818a;
+  position:relative;
+  display:grid;
+  place-items:center;
+  color:white;
+  font:bold 8px Montserrat;
+}
+
+.cooler-installed:before{
+  content:"";
+  position:absolute;
+  width:60%;
+  height:60%;
+  border-radius:50%;
+  border:5px solid #909ba2;
+}
+
+.cooler-installed:after{
+  content:"CPU FAN";
+  position:relative;
+  z-index:2;
+}
+
+/* INSTRUCTION */
 
 .instruction{
   padding:17px;
@@ -850,7 +958,7 @@ button{
   color:#ffb6b6;
 }
 
-/* complete */
+/* COMPLETE */
 
 .complete-screen{
   display:none;
@@ -954,7 +1062,7 @@ button{
 <header>
   <div class="brand">
     <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
-    <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V2</p>
+    <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3A</p>
   </div>
 
   <div class="student">
@@ -972,7 +1080,7 @@ button{
 
   <div class="status-card">
     <small>KEMAJUAN PEMASANGAN</small>
-    <strong id="progressText">0 / 6 komponen</strong>
+    <strong id="progressText">0 / 8 langkah</strong>
 
     <div class="progress-wrap">
       <div id="progress"></div>
@@ -996,7 +1104,6 @@ button{
 
 </section>
 
-
 <section class="workspace">
 
 <div class="panel">
@@ -1015,6 +1122,26 @@ button{
       <div>
         <strong>CPU / Processor</strong>
         <small>Pemproses utama</small>
+      </div>
+    </div>
+
+    <div class="part" data-part="thermal">
+      <div class="visual-part">
+        <div class="thermal-mini"></div>
+      </div>
+      <div>
+        <strong>Thermal Paste</strong>
+        <small>Pes haba CPU</small>
+      </div>
+    </div>
+
+    <div class="part" data-part="cooler">
+      <div class="visual-part">
+        <div class="cooler-mini"></div>
+      </div>
+      <div>
+        <strong>CPU Cooler</strong>
+        <small>Heatsink + fan</small>
       </div>
     </div>
 
@@ -1072,18 +1199,17 @@ button{
 
 </div>
 
-
 <div class="panel">
 
   <div class="panel-title">
     <h2>🔧 Workbench Pemasangan</h2>
-    <p>Motherboard dan casing simulasi realistik.</p>
+    <p>Pasang komponen mengikut urutan yang betul.</p>
   </div>
 
   <div class="bench">
 
     <div class="bench-label">
-      <span>⚠️ Ikuti urutan pemasangan.</span>
+      <span>⚠️ Ikuti arahan satu demi satu.</span>
       <span>ESD SAFE WORK AREA</span>
     </div>
 
@@ -1101,8 +1227,8 @@ button{
         <div class="vrm"></div>
         <div class="chipset"></div>
 
-        <div class="cpu8" title="8-pin CPU Power"></div>
-        <div class="atx24" title="24-pin ATX Power"></div>
+        <div class="cpu8"></div>
+        <div class="atx24"></div>
 
         <div class="dimm-real">
           <div class="dimm"></div>
@@ -1124,12 +1250,20 @@ button{
           CPU SOCKET
         </div>
 
+        <div class="slot thermal-slot" data-slot="thermal">
+          THERMAL
+        </div>
+
+        <div class="slot cooler-slot" data-slot="cooler">
+          CPU COOLER
+        </div>
+
         <div class="slot ram-slot" data-slot="ram">
           DIMM
         </div>
 
         <div class="slot m2-slot" data-slot="m2">
-          M.2 NVMe SLOT
+          M.2 NVMe
         </div>
 
         <div class="slot gpu-slot" data-slot="gpu">
@@ -1137,7 +1271,7 @@ button{
         </div>
 
         <div class="slot drive-slot" data-slot="ssd">
-          2.5" SSD BAY
+          SSD BAY
         </div>
 
         <div class="slot psu-slot" data-slot="psu">
@@ -1156,7 +1290,6 @@ button{
 
 </div>
 
-
 <div class="panel instruction-panel">
 
   <div class="panel-title">
@@ -1167,7 +1300,7 @@ button{
   <div class="instruction">
 
     <div class="step-number" id="stepNumber">
-      LANGKAH 1 / 6
+      LANGKAH 1 / 8
     </div>
 
     <h3 id="instructionTitle">
@@ -1207,7 +1340,6 @@ button{
 
 </main>
 
-
 <div class="complete-screen" id="completeScreen">
 
   <div class="complete-card">
@@ -1228,7 +1360,6 @@ button{
 
 </div>
 
-
 <script>
 
 const STORAGE_KEY = "c01_assembly_student";
@@ -1242,13 +1373,11 @@ if(!studentData){
 }
 
 if(studentData){
-
   document.getElementById("studentName").textContent =
   studentData.name;
 
   document.getElementById("studentInfo").textContent =
   studentData.id + " • " + studentData.className;
-
 }
 
 const steps = [
@@ -1262,10 +1391,26 @@ const steps = [
 },
 
 {
+  part:"thermal",
+  title:"Sapukan Thermal Paste",
+  text:"Pilih thermal paste dan sapukan sedikit pada bahagian tengah permukaan CPU.",
+  tip:"Gunakan thermal paste secukupnya, kira-kira sebesar biji kacang. Jangan sapu terlalu banyak.",
+  installed:'<div class="thermal-installed"></div>'
+},
+
+{
+  part:"cooler",
+  title:"Pasang CPU Cooler",
+  text:"Pilih CPU cooler dan pasangkan di atas CPU yang telah mempunyai thermal paste.",
+  tip:"Pastikan heatsink duduk rata di atas CPU dan semua pin atau skru diketatkan secara seimbang.",
+  installed:'<div class="cooler-installed"></div>'
+},
+
+{
   part:"ram",
   title:"Pasang RAM",
   text:"Pilih modul RAM dan pasangkan pada slot DIMM motherboard.",
-  tip:"Pastikan takuk RAM sejajar dengan takuk slot DIMM sebelum ditekan sehingga pengunci terkunci.",
+  tip:"Pastikan takuk RAM sejajar dengan slot DIMM sebelum ditekan sehingga pengunci terkunci.",
   installed:'<div class="install-hardware ram"></div>'
 },
 
@@ -1320,7 +1465,6 @@ document.querySelectorAll(".slot");
 const feedback =
 document.getElementById("feedback");
 
-
 function updateInstruction(){
 
   const step = steps[currentStep];
@@ -1354,7 +1498,6 @@ function updateInstruction(){
 
 }
 
-
 parts.forEach(part=>{
 
   part.addEventListener("click",()=>{
@@ -1379,7 +1522,6 @@ parts.forEach(part=>{
   });
 
 });
-
 
 slots.forEach(slot=>{
 
@@ -1422,7 +1564,6 @@ slots.forEach(slot=>{
   });
 
 });
-
 
 function installCorrect(slot){
 
@@ -1485,7 +1626,6 @@ function installCorrect(slot){
 
 }
 
-
 function installWrong(slot){
 
   mistakes++;
@@ -1509,7 +1649,6 @@ function installWrong(slot){
 
 }
 
-
 function updateStatus(){
 
   document.getElementById("score").textContent =
@@ -1522,13 +1661,12 @@ function updateStatus(){
   currentStep +
   " / " +
   steps.length +
-  " komponen";
+  " langkah";
 
   document.getElementById("progress").style.width =
   (currentStep / steps.length * 100) + "%";
 
 }
-
 
 function startTimer(){
 
@@ -1556,7 +1694,6 @@ function startTimer(){
   },1000);
 
 }
-
 
 function finishSimulation(){
 
@@ -1622,11 +1759,9 @@ function finishSimulation(){
 
 }
 
-
 function restartSimulation(){
   location.reload();
 }
-
 
 document.getElementById(
   "resetBtn"
@@ -1644,7 +1779,6 @@ document.getElementById(
 
   }
 );
-
 
 document.getElementById(
   "logoutBtn"
@@ -1669,7 +1803,6 @@ document.getElementById(
 
   }
 );
-
 
 updateInstruction();
 updateStatus();
