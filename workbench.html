@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Workbench V3A | Computer Assembly Simulator C01</title>
+<title>Workbench V3B | Computer Assembly Simulator C01</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,9 +18,7 @@
 }
 
 :root{
-  --bg:#07152c;
   --panel:#0d2447;
-  --panel2:#102d57;
   --cyan:#32d7ff;
   --orange:#ff9f1a;
   --green:#37df83;
@@ -176,7 +174,7 @@ main{
   color:var(--muted);
 }
 
-/* PARTS */
+/* COMPONENTS */
 
 .parts{
   padding:13px;
@@ -185,7 +183,7 @@ main{
 }
 
 .part{
-  min-height:76px;
+  min-height:74px;
   padding:10px 12px;
   display:flex;
   align-items:center;
@@ -216,13 +214,13 @@ main{
 
 .part strong{
   display:block;
-  font-size:.77rem;
+  font-size:.76rem;
 }
 
 .part small{
   display:block;
   margin-top:2px;
-  font-size:.63rem;
+  font-size:.62rem;
   color:#a9c0da;
 }
 
@@ -271,16 +269,6 @@ main{
   border-radius:2px;
 }
 
-.thermal-mini:after{
-  content:"PASTE";
-  position:absolute;
-  left:-4px;
-  bottom:8px;
-  transform:rotate(-90deg);
-  font:bold 6px Montserrat;
-  color:#4a545b;
-}
-
 .cooler-mini{
   width:48px;
   height:48px;
@@ -296,18 +284,6 @@ main{
   inset:8px;
   border-radius:50%;
   background:#8a959d;
-}
-
-.cooler-mini:after{
-  content:"";
-  position:absolute;
-  width:4px;
-  height:30px;
-  background:#252e35;
-  left:17px;
-  top:4px;
-  transform:rotate(45deg);
-  box-shadow:0 0 0 transparent;
 }
 
 .ram-mini{
@@ -451,6 +427,56 @@ main{
   bottom:1px;
   font:bold 6px Montserrat;
   color:white;
+}
+
+/* CABLE MINI */
+
+.cable-mini{
+  width:55px;
+  height:44px;
+  position:relative;
+}
+
+.cable-mini:before{
+  content:"";
+  position:absolute;
+  width:41px;
+  height:22px;
+  left:0;
+  top:10px;
+  border-top:5px solid #171d22;
+  border-right:5px solid #171d22;
+  border-radius:0 15px 0 0;
+}
+
+.cable-mini.atx:after{
+  content:"24";
+  position:absolute;
+  right:0;
+  top:15px;
+  width:22px;
+  height:17px;
+  display:grid;
+  place-items:center;
+  background:#20282e;
+  border:2px solid #77828a;
+  color:#fff;
+  font:bold 7px Montserrat;
+}
+
+.cable-mini.cpu8c:after{
+  content:"8";
+  position:absolute;
+  right:0;
+  top:15px;
+  width:20px;
+  height:17px;
+  display:grid;
+  place-items:center;
+  background:#20282e;
+  border:2px solid #77828a;
+  color:#fff;
+  font:bold 7px Montserrat;
 }
 
 /* BENCH */
@@ -606,41 +632,6 @@ main{
   color:#aeb9c0;
 }
 
-.sata-bank{
-  position:absolute;
-  right:18px;
-  bottom:60px;
-  display:grid;
-  grid-template-columns:repeat(2,26px);
-  gap:5px;
-}
-
-.sata-port{
-  height:17px;
-  background:#20292f;
-  border:2px solid #718087;
-}
-
-.atx24{
-  position:absolute;
-  right:6px;
-  top:205px;
-  width:24px;
-  height:95px;
-  background:#161f25;
-  border:3px solid #69777f;
-}
-
-.cpu8{
-  position:absolute;
-  left:75px;
-  top:8px;
-  width:62px;
-  height:22px;
-  background:#161f25;
-  border:3px solid #69777f;
-}
-
 .dimm-real{
   position:absolute;
   right:70px;
@@ -665,6 +656,21 @@ main{
   height:16px;
   background:#d9e2e5;
   border:2px solid #9eabad;
+}
+
+.sata-bank{
+  position:absolute;
+  right:18px;
+  bottom:60px;
+  display:grid;
+  grid-template-columns:repeat(2,26px);
+  gap:5px;
+}
+
+.sata-port{
+  height:17px;
+  background:#20292f;
+  border:2px solid #718087;
 }
 
 .mobo-name{
@@ -721,7 +727,6 @@ main{
   height:108px;
   left:165px;
   top:96px;
-  background:rgba(28,54,50,.4);
 }
 
 .thermal-slot{
@@ -779,6 +784,28 @@ main{
   background:#151c22;
 }
 
+/* POWER CONNECTOR SLOTS */
+
+.atx24-slot{
+  width:45px;
+  height:102px;
+  right:-1px;
+  top:202px;
+  background:#161f25;
+  z-index:12;
+}
+
+.cpu8-slot{
+  width:72px;
+  height:38px;
+  left:70px;
+  top:-5px;
+  background:#161f25;
+  z-index:12;
+}
+
+/* INSTALLED HARDWARE */
+
 .install-hardware{
   display:flex;
   align-items:center;
@@ -833,7 +860,6 @@ main{
   border-radius:50%;
   background:#d8dadd;
   border:2px solid #f3f3f3;
-  box-shadow:0 0 10px rgba(255,255,255,.3);
 }
 
 .cooler-installed{
@@ -842,26 +868,61 @@ main{
   border-radius:50%;
   background:#252d34;
   border:6px solid #75818a;
-  position:relative;
   display:grid;
   place-items:center;
   color:white;
   font:bold 8px Montserrat;
 }
 
-.cooler-installed:before{
-  content:"";
-  position:absolute;
-  width:60%;
-  height:60%;
-  border-radius:50%;
-  border:5px solid #909ba2;
+/* INSTALLED CABLE */
+
+.power-plug{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  background:#1c242a;
+  border:3px solid #77848d;
+  color:white;
+  font:bold 7px Montserrat;
+  position:relative;
 }
 
-.cooler-installed:after{
-  content:"CPU FAN";
+.power-plug:after{
+  content:"";
+  position:absolute;
+  width:55px;
+  height:5px;
+  background:#171d22;
+  right:-52px;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:10px;
+}
+
+.cpu-power-plug{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  background:#1c242a;
+  border:3px solid #77848d;
+  color:white;
+  font:bold 7px Montserrat;
   position:relative;
-  z-index:2;
+}
+
+.cpu-power-plug:after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:55px;
+  background:#171d22;
+  left:50%;
+  top:-52px;
+  transform:translateX(-50%);
 }
 
 /* INSTRUCTION */
@@ -1014,6 +1075,7 @@ button{
 }
 
 @media(max-width:760px){
+
   header{
     position:relative;
     flex-direction:column;
@@ -1039,19 +1101,11 @@ button{
   .instruction-panel{
     grid-column:auto;
   }
-
-  .bench{
-    min-height:550px;
-  }
 }
 
 @media(max-width:480px){
   main{
     padding:10px;
-  }
-
-  .parts{
-    grid-template-columns:1fr 1fr;
   }
 }
 </style>
@@ -1060,279 +1114,296 @@ button{
 <body>
 
 <header>
-  <div class="brand">
-    <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
-    <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3A</p>
-  </div>
 
-  <div class="student">
-    <div class="avatar">👨‍💻</div>
-    <div>
-      <strong id="studentName">Pelajar</strong>
-      <small id="studentInfo">ID • Kelas</small>
-    </div>
+<div class="brand">
+  <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
+  <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3B</p>
+</div>
+
+<div class="student">
+  <div class="avatar">👨‍💻</div>
+  <div>
+    <strong id="studentName">Pelajar</strong>
+    <small id="studentInfo">ID • Kelas</small>
   </div>
+</div>
+
 </header>
 
 <main>
 
 <section class="statusbar">
 
-  <div class="status-card">
-    <small>KEMAJUAN PEMASANGAN</small>
-    <strong id="progressText">0 / 8 langkah</strong>
+<div class="status-card">
+  <small>KEMAJUAN PEMASANGAN</small>
+  <strong id="progressText">0 / 10 langkah</strong>
 
-    <div class="progress-wrap">
-      <div id="progress"></div>
-    </div>
+  <div class="progress-wrap">
+    <div id="progress"></div>
   </div>
+</div>
 
-  <div class="status-card">
-    <small>SKOR</small>
-    <strong id="score">0</strong>
-  </div>
+<div class="status-card">
+  <small>SKOR</small>
+  <strong id="score">0</strong>
+</div>
 
-  <div class="status-card">
-    <small>KESALAHAN</small>
-    <strong id="mistakes">0</strong>
-  </div>
+<div class="status-card">
+  <small>KESALAHAN</small>
+  <strong id="mistakes">0</strong>
+</div>
 
-  <div class="status-card">
-    <small>MASA</small>
-    <strong id="timer">00:00</strong>
-  </div>
+<div class="status-card">
+  <small>MASA</small>
+  <strong id="timer">00:00</strong>
+</div>
 
 </section>
 
 <section class="workspace">
 
-<div class="panel">
-
-  <div class="panel-title">
-    <h2>🧰 Komponen Perkakasan</h2>
-    <p>Pilih komponen mengikut arahan teknikal.</p>
-  </div>
-
-  <div class="parts">
-
-    <div class="part" data-part="cpu">
-      <div class="visual-part">
-        <div class="cpu-mini"></div>
-      </div>
-      <div>
-        <strong>CPU / Processor</strong>
-        <small>Pemproses utama</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="thermal">
-      <div class="visual-part">
-        <div class="thermal-mini"></div>
-      </div>
-      <div>
-        <strong>Thermal Paste</strong>
-        <small>Pes haba CPU</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="cooler">
-      <div class="visual-part">
-        <div class="cooler-mini"></div>
-      </div>
-      <div>
-        <strong>CPU Cooler</strong>
-        <small>Heatsink + fan</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="ram">
-      <div class="visual-part">
-        <div class="ram-mini"></div>
-      </div>
-      <div>
-        <strong>RAM</strong>
-        <small>Memory module</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="m2">
-      <div class="visual-part">
-        <div class="m2-mini"></div>
-      </div>
-      <div>
-        <strong>M.2 NVMe SSD</strong>
-        <small>PCIe storage</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="gpu">
-      <div class="visual-part">
-        <div class="gpu-mini"></div>
-      </div>
-      <div>
-        <strong>Graphics Card</strong>
-        <small>PCIe x16 GPU</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="ssd">
-      <div class="visual-part">
-        <div class="ssd-mini"></div>
-      </div>
-      <div>
-        <strong>SSD SATA</strong>
-        <small>2.5 inch drive</small>
-      </div>
-    </div>
-
-    <div class="part" data-part="psu">
-      <div class="visual-part">
-        <div class="psu-mini"></div>
-      </div>
-      <div>
-        <strong>Power Supply</strong>
-        <small>PSU unit</small>
-      </div>
-    </div>
-
-  </div>
-
-</div>
+<!-- COMPONENTS -->
 
 <div class="panel">
 
-  <div class="panel-title">
-    <h2>🔧 Workbench Pemasangan</h2>
-    <p>Pasang komponen mengikut urutan yang betul.</p>
+<div class="panel-title">
+  <h2>🧰 Komponen & Kabel</h2>
+  <p>Pilih item mengikut arahan teknikal.</p>
+</div>
+
+<div class="parts">
+
+<div class="part" data-part="cpu">
+  <div class="visual-part"><div class="cpu-mini"></div></div>
+  <div>
+    <strong>CPU / Processor</strong>
+    <small>Pemproses utama</small>
   </div>
+</div>
 
-  <div class="bench">
-
-    <div class="bench-label">
-      <span>⚠️ Ikuti arahan satu demi satu.</span>
-      <span>ESD SAFE WORK AREA</span>
-    </div>
-
-    <div class="pc-case">
-
-      <div class="case-label">ATX COMPUTER CASE • SIDE PANEL REMOVED</div>
-
-      <div class="motherboard">
-
-        <div class="trace t1"></div>
-        <div class="trace t2"></div>
-        <div class="trace t3"></div>
-
-        <div class="io-block"></div>
-        <div class="vrm"></div>
-        <div class="chipset"></div>
-
-        <div class="cpu8"></div>
-        <div class="atx24"></div>
-
-        <div class="dimm-real">
-          <div class="dimm"></div>
-          <div class="dimm"></div>
-          <div class="dimm"></div>
-          <div class="dimm"></div>
-        </div>
-
-        <div class="pcie-small"></div>
-
-        <div class="sata-bank">
-          <div class="sata-port"></div>
-          <div class="sata-port"></div>
-          <div class="sata-port"></div>
-          <div class="sata-port"></div>
-        </div>
-
-        <div class="slot cpu-slot" data-slot="cpu">
-          CPU SOCKET
-        </div>
-
-        <div class="slot thermal-slot" data-slot="thermal">
-          THERMAL
-        </div>
-
-        <div class="slot cooler-slot" data-slot="cooler">
-          CPU COOLER
-        </div>
-
-        <div class="slot ram-slot" data-slot="ram">
-          DIMM
-        </div>
-
-        <div class="slot m2-slot" data-slot="m2">
-          M.2 NVMe
-        </div>
-
-        <div class="slot gpu-slot" data-slot="gpu">
-          PCIe x16
-        </div>
-
-        <div class="slot drive-slot" data-slot="ssd">
-          SSD BAY
-        </div>
-
-        <div class="slot psu-slot" data-slot="psu">
-          PSU BAY
-        </div>
-
-        <div class="mobo-name">
-          ATX MOTHERBOARD • C01 TRAINING BOARD
-        </div>
-
-      </div>
-
-    </div>
-
+<div class="part" data-part="thermal">
+  <div class="visual-part"><div class="thermal-mini"></div></div>
+  <div>
+    <strong>Thermal Paste</strong>
+    <small>Pes haba CPU</small>
   </div>
+</div>
+
+<div class="part" data-part="cooler">
+  <div class="visual-part"><div class="cooler-mini"></div></div>
+  <div>
+    <strong>CPU Cooler</strong>
+    <small>Heatsink + fan</small>
+  </div>
+</div>
+
+<div class="part" data-part="ram">
+  <div class="visual-part"><div class="ram-mini"></div></div>
+  <div>
+    <strong>RAM</strong>
+    <small>Memory module</small>
+  </div>
+</div>
+
+<div class="part" data-part="m2">
+  <div class="visual-part"><div class="m2-mini"></div></div>
+  <div>
+    <strong>M.2 NVMe SSD</strong>
+    <small>PCIe storage</small>
+  </div>
+</div>
+
+<div class="part" data-part="gpu">
+  <div class="visual-part"><div class="gpu-mini"></div></div>
+  <div>
+    <strong>Graphics Card</strong>
+    <small>PCIe x16 GPU</small>
+  </div>
+</div>
+
+<div class="part" data-part="ssd">
+  <div class="visual-part"><div class="ssd-mini"></div></div>
+  <div>
+    <strong>SSD SATA</strong>
+    <small>2.5 inch drive</small>
+  </div>
+</div>
+
+<div class="part" data-part="psu">
+  <div class="visual-part"><div class="psu-mini"></div></div>
+  <div>
+    <strong>Power Supply</strong>
+    <small>PSU unit</small>
+  </div>
+</div>
+
+<div class="part" data-part="atx24">
+  <div class="visual-part">
+    <div class="cable-mini atx"></div>
+  </div>
+  <div>
+    <strong>24-pin ATX</strong>
+    <small>Main motherboard power</small>
+  </div>
+</div>
+
+<div class="part" data-part="cpu8">
+  <div class="visual-part">
+    <div class="cable-mini cpu8c"></div>
+  </div>
+  <div>
+    <strong>8-pin CPU / EPS</strong>
+    <small>CPU power cable</small>
+  </div>
+</div>
 
 </div>
+</div>
+
+<!-- WORKBENCH -->
+
+<div class="panel">
+
+<div class="panel-title">
+  <h2>🔧 Workbench Pemasangan</h2>
+  <p>Pasang komponen dan kabel mengikut urutan.</p>
+</div>
+
+<div class="bench">
+
+<div class="bench-label">
+  <span>⚠️ Ikuti arahan satu demi satu.</span>
+  <span>ESD SAFE WORK AREA</span>
+</div>
+
+<div class="pc-case">
+
+<div class="case-label">
+  ATX COMPUTER CASE • SIDE PANEL REMOVED
+</div>
+
+<div class="motherboard">
+
+<div class="trace t1"></div>
+<div class="trace t2"></div>
+<div class="trace t3"></div>
+
+<div class="io-block"></div>
+<div class="vrm"></div>
+<div class="chipset"></div>
+
+<div class="dimm-real">
+  <div class="dimm"></div>
+  <div class="dimm"></div>
+  <div class="dimm"></div>
+  <div class="dimm"></div>
+</div>
+
+<div class="pcie-small"></div>
+
+<div class="sata-bank">
+  <div class="sata-port"></div>
+  <div class="sata-port"></div>
+  <div class="sata-port"></div>
+  <div class="sata-port"></div>
+</div>
+
+<div class="slot cpu-slot" data-slot="cpu">
+  CPU SOCKET
+</div>
+
+<div class="slot thermal-slot" data-slot="thermal">
+  THERMAL
+</div>
+
+<div class="slot cooler-slot" data-slot="cooler">
+  CPU COOLER
+</div>
+
+<div class="slot ram-slot" data-slot="ram">
+  DIMM
+</div>
+
+<div class="slot m2-slot" data-slot="m2">
+  M.2 NVMe
+</div>
+
+<div class="slot gpu-slot" data-slot="gpu">
+  PCIe x16
+</div>
+
+<div class="slot drive-slot" data-slot="ssd">
+  SSD BAY
+</div>
+
+<div class="slot psu-slot" data-slot="psu">
+  PSU BAY
+</div>
+
+<div class="slot atx24-slot" data-slot="atx24">
+  24-PIN
+</div>
+
+<div class="slot cpu8-slot" data-slot="cpu8">
+  CPU 8-PIN
+</div>
+
+<div class="mobo-name">
+  ATX MOTHERBOARD • C01 TRAINING BOARD
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- INSTRUCTION -->
 
 <div class="panel instruction-panel">
 
-  <div class="panel-title">
-    <h2>📋 Arahan Teknikal</h2>
-    <p>Ikuti setiap langkah pemasangan.</p>
-  </div>
+<div class="panel-title">
+  <h2>📋 Arahan Teknikal</h2>
+  <p>Ikuti setiap langkah pemasangan.</p>
+</div>
 
-  <div class="instruction">
+<div class="instruction">
 
-    <div class="step-number" id="stepNumber">
-      LANGKAH 1 / 8
-    </div>
+<div class="step-number" id="stepNumber">
+  LANGKAH 1 / 10
+</div>
 
-    <h3 id="instructionTitle">
-      Pasang CPU
-    </h3>
+<h3 id="instructionTitle">
+  Pasang CPU
+</h3>
 
-    <p id="instructionText">
-      Pilih CPU dan pasangkan pada CPU Socket motherboard.
-    </p>
+<p id="instructionText">
+  Pilih CPU dan pasangkan pada CPU Socket motherboard.
+</p>
 
-    <div class="tip">
-      <strong>💡 TIP JURUTEKNIK</strong>
-      <p id="tipText">
-        Pastikan tanda segi tiga CPU sejajar dengan tanda socket.
-      </p>
-    </div>
+<div class="tip">
+  <strong>💡 TIP JURUTEKNIK</strong>
+  <p id="tipText">
+    Pastikan tanda segi tiga CPU sejajar dengan tanda socket.
+  </p>
+</div>
 
-    <div class="feedback" id="feedback">
-      👨‍🔧 Sistem bersedia. Mulakan pemasangan.
-    </div>
+<div class="feedback" id="feedback">
+  👨‍🔧 Sistem bersedia. Mulakan pemasangan.
+</div>
 
-  </div>
+</div>
 
-  <div class="controls">
-    <button class="reset" id="resetBtn">
-      ↻ MULAKAN SEMULA
-    </button>
+<div class="controls">
 
-    <button class="logout" id="logoutBtn">
-      🚪 LOGOUT
-    </button>
-  </div>
+<button class="reset" id="resetBtn">
+  ↻ MULAKAN SEMULA
+</button>
+
+<button class="logout" id="logoutBtn">
+  🚪 LOGOUT
+</button>
+
+</div>
 
 </div>
 
@@ -1340,24 +1411,23 @@ button{
 
 </main>
 
+<!-- COMPLETE -->
+
 <div class="complete-screen" id="completeScreen">
 
-  <div class="complete-card">
+<div class="complete-card">
 
-    <div class="trophy">🏆</div>
+<div class="trophy">🏆</div>
 
-    <h2>SIMULASI SELESAI!</h2>
+<h2>FASA PEMASANGAN SELESAI!</h2>
 
-    <p id="finalResult">
-      Tahniah! Anda berjaya menyiapkan pemasangan.
-    </p>
+<p id="finalResult"></p>
 
-    <button onclick="restartSimulation()">
-      🔄 ULANG SIMULASI
-    </button>
+<button onclick="restartSimulation()">
+  🔄 ULANG SIMULASI
+</button>
 
-  </div>
-
+</div>
 </div>
 
 <script>
@@ -1373,6 +1443,7 @@ if(!studentData){
 }
 
 if(studentData){
+
   document.getElementById("studentName").textContent =
   studentData.name;
 
@@ -1385,65 +1456,81 @@ const steps = [
 {
   part:"cpu",
   title:"Pasang CPU",
-  text:"Pilih CPU daripada panel komponen dan pasangkan pada CPU Socket motherboard.",
-  tip:"Pastikan tanda segi tiga pada CPU sejajar dengan penanda socket. Jangan paksa CPU masuk ke socket.",
+  text:"Pilih CPU dan pasangkan pada CPU Socket motherboard.",
+  tip:"Pastikan tanda segi tiga CPU sejajar dengan penanda socket. Jangan paksa CPU.",
   installed:'<div class="install-hardware cpu">CPU</div>'
 },
 
 {
   part:"thermal",
   title:"Sapukan Thermal Paste",
-  text:"Pilih thermal paste dan sapukan sedikit pada bahagian tengah permukaan CPU.",
-  tip:"Gunakan thermal paste secukupnya, kira-kira sebesar biji kacang. Jangan sapu terlalu banyak.",
+  text:"Sapukan sedikit thermal paste pada bahagian tengah permukaan CPU.",
+  tip:"Gunakan thermal paste kira-kira sebesar biji kacang. Jangan gunakan terlalu banyak.",
   installed:'<div class="thermal-installed"></div>'
 },
 
 {
   part:"cooler",
   title:"Pasang CPU Cooler",
-  text:"Pilih CPU cooler dan pasangkan di atas CPU yang telah mempunyai thermal paste.",
-  tip:"Pastikan heatsink duduk rata di atas CPU dan semua pin atau skru diketatkan secara seimbang.",
-  installed:'<div class="cooler-installed"></div>'
+  text:"Pasangkan CPU cooler di atas CPU yang telah mempunyai thermal paste.",
+  tip:"Pastikan heatsink duduk rata dan semua skru atau pin diketatkan secara seimbang.",
+  installed:'<div class="cooler-installed">CPU FAN</div>'
 },
 
 {
   part:"ram",
   title:"Pasang RAM",
-  text:"Pilih modul RAM dan pasangkan pada slot DIMM motherboard.",
-  tip:"Pastikan takuk RAM sejajar dengan slot DIMM sebelum ditekan sehingga pengunci terkunci.",
+  text:"Pasangkan modul RAM pada slot DIMM motherboard.",
+  tip:"Pastikan takuk RAM sejajar dengan slot sebelum ditekan.",
   installed:'<div class="install-hardware ram"></div>'
 },
 
 {
   part:"m2",
   title:"Pasang M.2 NVMe SSD",
-  text:"Pilih M.2 NVMe SSD dan pasangkan pada slot M.2 motherboard.",
-  tip:"Masukkan modul M.2 pada sudut kecil sebelum ditekan dan dikunci menggunakan skru.",
+  text:"Pasangkan M.2 NVMe SSD pada slot M.2 motherboard.",
+  tip:"Masukkan modul pada sudut kecil kemudian tekan dan kunci menggunakan skru.",
   installed:'<div class="install-hardware m2">M.2 NVMe</div>'
 },
 
 {
   part:"gpu",
   title:"Pasang Graphics Card",
-  text:"Pilih kad grafik dan pasangkan pada slot PCIe x16 motherboard.",
-  tip:"Pastikan pengunci PCIe terbuka dan kad grafik masuk sepenuhnya ke dalam slot.",
+  text:"Pasangkan kad grafik pada slot PCIe x16 motherboard.",
+  tip:"Pastikan pengunci PCIe terbuka sebelum GPU ditekan masuk.",
   installed:'<div class="install-hardware gpu">GRAPHICS CARD</div>'
 },
 
 {
   part:"ssd",
   title:"Pasang SSD SATA",
-  text:"Pilih SSD SATA 2.5 inci dan pasangkan pada SSD bay dalam casing.",
-  tip:"SSD SATA akan memerlukan sambungan SATA Data dan SATA Power dalam fasa pemasangan kabel.",
+  text:"Pasangkan SSD SATA 2.5 inci pada SSD Bay.",
+  tip:"SSD ini akan disambungkan kepada SATA Data dan SATA Power pada fasa berikutnya.",
   installed:'<div class="install-hardware ssd">SSD SATA</div>'
 },
 
 {
   part:"psu",
   title:"Pasang Power Supply Unit",
-  text:"Pilih PSU dan pasangkan pada PSU Bay di bahagian bawah casing.",
-  tip:"Pastikan kedudukan kipas PSU mempunyai aliran udara yang sesuai sebelum unit diketatkan dengan skru.",
+  text:"Pasangkan PSU pada PSU Bay di dalam casing.",
+  tip:"Pastikan kipas PSU mempunyai laluan udara yang sesuai.",
   installed:'<div class="install-hardware psu">POWER SUPPLY</div>'
+},
+
+{
+  part:"atx24",
+  title:"Sambungkan Kabel 24-pin ATX",
+  text:"Pilih kabel 24-pin ATX daripada PSU dan sambungkan kepada penyambung kuasa utama motherboard.",
+  tip:"Penyambung 24-pin ATX biasanya berada pada bahagian kanan motherboard. Pastikan klip pengunci masuk sepenuhnya.",
+  installed:'<div class="power-plug">24-PIN</div>'
+},
+
+{
+  part:"cpu8",
+  title:"Sambungkan Kabel 8-pin CPU / EPS",
+  text:"Pilih kabel CPU 8-pin/EPS dan sambungkan kepada penyambung kuasa CPU motherboard.",
+  tip:"Penyambung CPU/EPS biasanya berada berhampiran bahagian atas motherboard. Jangan tertukar dengan kabel PCIe GPU.",
+  installed:'<div class="cpu-power-plug">CPU 8-PIN</div>'
 }
 
 ];
@@ -1517,7 +1604,7 @@ parts.forEach(part=>{
     feedback.textContent =
     "🔧 " +
     part.querySelector("strong").textContent +
-    " dipilih. Sekarang pilih lokasi pemasangan.";
+    " dipilih. Sekarang pilih lokasi pemasangan yang betul.";
 
   });
 
@@ -1537,7 +1624,7 @@ slots.forEach(slot=>{
       "feedback error";
 
       feedback.textContent =
-      "⚠️ Pilih komponen terlebih dahulu.";
+      "⚠️ Pilih komponen atau kabel terlebih dahulu.";
 
       return;
     }
@@ -1571,11 +1658,8 @@ function installCorrect(slot){
   steps[currentStep];
 
   slot.classList.remove("ready");
-
   slot.classList.add("correct");
-
-  slot.innerHTML =
-  step.installed;
+  slot.innerHTML = step.installed;
 
   const selectedElement =
   document.querySelector(
@@ -1585,7 +1669,6 @@ function installCorrect(slot){
   );
 
   selectedElement.classList.remove("active");
-
   selectedElement.classList.add("installed");
 
   score += 100;
@@ -1639,7 +1722,7 @@ function installWrong(slot){
   "feedback error";
 
   feedback.textContent =
-  "❌ Pemasangan tidak tepat. Semak arahan dan cuba lagi.";
+  "❌ Sambungan atau pemasangan tidak tepat. Semak arahan dan cuba lagi.";
 
   updateStatus();
 
@@ -1722,6 +1805,7 @@ function finishSimulation(){
     mistakes:mistakes,
     accuracy:accuracy,
     time:time,
+    version:"V3B",
     completedAt:new Date().toISOString()
   };
 
@@ -1735,6 +1819,8 @@ function finishSimulation(){
   "Tahniah <strong>" +
   studentData.name +
   "</strong>!<br><br>" +
+
+  "Komponen asas dan sambungan kuasa motherboard telah selesai.<br><br>" +
 
   "Skor: <strong>" +
   score +
