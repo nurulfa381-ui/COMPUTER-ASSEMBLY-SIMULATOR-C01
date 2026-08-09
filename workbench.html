@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Workbench V3B | Computer Assembly Simulator C01</title>
+<title>Workbench V3C | Computer Assembly Simulator C01</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,7 +174,7 @@ main{
   color:var(--muted);
 }
 
-/* COMPONENTS */
+/* COMPONENT PANEL */
 
 .parts{
   padding:13px;
@@ -183,7 +183,7 @@ main{
 }
 
 .part{
-  min-height:74px;
+  min-height:72px;
   padding:10px 12px;
   display:flex;
   align-items:center;
@@ -214,13 +214,13 @@ main{
 
 .part strong{
   display:block;
-  font-size:.76rem;
+  font-size:.75rem;
 }
 
 .part small{
   display:block;
   margin-top:2px;
-  font-size:.62rem;
+  font-size:.61rem;
   color:#a9c0da;
 }
 
@@ -429,7 +429,7 @@ main{
   color:white;
 }
 
-/* CABLE MINI */
+/* POWER CABLES */
 
 .cable-mini{
   width:55px;
@@ -479,10 +479,81 @@ main{
   font:bold 7px Montserrat;
 }
 
+/* SATA DATA MINI */
+
+.sata-data-mini{
+  width:58px;
+  height:42px;
+  position:relative;
+}
+
+.sata-data-mini:before{
+  content:"";
+  position:absolute;
+  width:44px;
+  height:24px;
+  left:4px;
+  top:8px;
+  border-bottom:4px solid #e44747;
+  border-left:4px solid #e44747;
+  border-radius:0 0 0 12px;
+}
+
+.sata-data-mini:after{
+  content:"DATA";
+  position:absolute;
+  right:0;
+  bottom:1px;
+  width:29px;
+  height:15px;
+  display:grid;
+  place-items:center;
+  background:#1b2025;
+  border:2px solid #666f76;
+  color:#fff;
+  font:bold 6px Montserrat;
+}
+
+/* SATA POWER MINI */
+
+.sata-power-mini{
+  width:58px;
+  height:42px;
+  position:relative;
+}
+
+.sata-power-mini:before{
+  content:"";
+  position:absolute;
+  width:42px;
+  height:22px;
+  left:3px;
+  top:10px;
+  border-bottom:6px solid #f4d23c;
+  border-left:6px solid #d83b3b;
+  border-right:6px solid #171717;
+  border-radius:0 0 9px 9px;
+}
+
+.sata-power-mini:after{
+  content:"PWR";
+  position:absolute;
+  right:0;
+  bottom:1px;
+  width:29px;
+  height:15px;
+  display:grid;
+  place-items:center;
+  background:#1b2025;
+  border:2px solid #666f76;
+  color:#fff;
+  font:bold 6px Montserrat;
+}
+
 /* BENCH */
 
 .bench{
-  min-height:720px;
+  min-height:740px;
   padding:16px;
   overflow:auto;
   background:
@@ -507,8 +578,8 @@ main{
 
 .pc-case{
   position:relative;
-  width:780px;
-  min-height:610px;
+  width:800px;
+  min-height:630px;
   margin:0 auto;
   padding:34px 36px;
   border-radius:22px;
@@ -660,17 +731,25 @@ main{
 
 .sata-bank{
   position:absolute;
-  right:18px;
-  bottom:60px;
+  right:14px;
+  bottom:58px;
   display:grid;
-  grid-template-columns:repeat(2,26px);
+  grid-template-columns:repeat(2,28px);
   gap:5px;
 }
 
 .sata-port{
-  height:17px;
+  height:18px;
   background:#20292f;
   border:2px solid #718087;
+}
+
+.sata-caption{
+  position:absolute;
+  right:13px;
+  bottom:110px;
+  font:bold 7px Montserrat;
+  color:#a8d9d2;
 }
 
 .mobo-name{
@@ -682,7 +761,7 @@ main{
   letter-spacing:1px;
 }
 
-/* SLOTS */
+/* DROP SLOTS */
 
 .slot{
   position:absolute;
@@ -779,12 +858,10 @@ main{
 .psu-slot{
   width:155px;
   height:120px;
-  left:565px;
+  left:575px;
   bottom:45px;
   background:#151c22;
 }
-
-/* POWER CONNECTOR SLOTS */
 
 .atx24-slot{
   width:45px;
@@ -802,6 +879,28 @@ main{
   top:-5px;
   background:#161f25;
   z-index:12;
+}
+
+/* SATA DATA CONNECTOR ON MOTHERBOARD */
+
+.sata-data-slot{
+  width:76px;
+  height:40px;
+  right:5px;
+  bottom:45px;
+  background:#161f25;
+  z-index:15;
+}
+
+/* SATA POWER CONNECTOR ON SSD */
+
+.sata-power-slot{
+  width:105px;
+  height:34px;
+  left:595px;
+  top:138px;
+  background:#161f25;
+  z-index:16;
 }
 
 /* INSTALLED HARDWARE */
@@ -874,8 +973,6 @@ main{
   font:bold 8px Montserrat;
 }
 
-/* INSTALLED CABLE */
-
 .power-plug{
   width:100%;
   height:100%;
@@ -886,19 +983,6 @@ main{
   border:3px solid #77848d;
   color:white;
   font:bold 7px Montserrat;
-  position:relative;
-}
-
-.power-plug:after{
-  content:"";
-  position:absolute;
-  width:55px;
-  height:5px;
-  background:#171d22;
-  right:-52px;
-  top:50%;
-  transform:translateY(-50%);
-  border-radius:10px;
 }
 
 .cpu-power-plug{
@@ -911,18 +995,67 @@ main{
   border:3px solid #77848d;
   color:white;
   font:bold 7px Montserrat;
+}
+
+/* INSTALLED SATA DATA */
+
+.sata-data-installed{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  background:#1c242a;
+  border:3px solid #e34a4a;
+  color:white;
+  font:bold 7px Montserrat;
   position:relative;
 }
 
-.cpu-power-plug:after{
+.sata-data-installed:after{
   content:"";
   position:absolute;
-  width:5px;
-  height:55px;
-  background:#171d22;
-  left:50%;
-  top:-52px;
-  transform:translateX(-50%);
+  width:110px;
+  height:4px;
+  background:#e34a4a;
+  right:-104px;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:8px;
+}
+
+/* INSTALLED SATA POWER */
+
+.sata-power-installed{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  background:#1c242a;
+  border:3px solid #d0b734;
+  color:white;
+  font:bold 7px Montserrat;
+  position:relative;
+}
+
+.sata-power-installed:after{
+  content:"";
+  position:absolute;
+  width:115px;
+  height:8px;
+  background:
+    linear-gradient(
+      to bottom,
+      #e6ce42 0 25%,
+      #d53a3a 25% 50%,
+      #171717 50% 75%,
+      #e6ce42 75% 100%
+    );
+  right:-108px;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:8px;
 }
 
 /* INSTRUCTION */
@@ -1075,7 +1208,6 @@ button{
 }
 
 @media(max-width:760px){
-
   header{
     position:relative;
     flex-direction:column;
@@ -1117,7 +1249,7 @@ button{
 
 <div class="brand">
   <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
-  <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3B</p>
+  <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3C</p>
 </div>
 
 <div class="student">
@@ -1136,7 +1268,7 @@ button{
 
 <div class="status-card">
   <small>KEMAJUAN PEMASANGAN</small>
-  <strong id="progressText">0 / 10 langkah</strong>
+  <strong id="progressText">0 / 12 langkah</strong>
 
   <div class="progress-wrap">
     <div id="progress"></div>
@@ -1162,7 +1294,7 @@ button{
 
 <section class="workspace">
 
-<!-- COMPONENTS -->
+<!-- COMPONENT PANEL -->
 
 <div class="panel">
 
@@ -1238,9 +1370,7 @@ button{
 </div>
 
 <div class="part" data-part="atx24">
-  <div class="visual-part">
-    <div class="cable-mini atx"></div>
-  </div>
+  <div class="visual-part"><div class="cable-mini atx"></div></div>
   <div>
     <strong>24-pin ATX</strong>
     <small>Main motherboard power</small>
@@ -1248,12 +1378,26 @@ button{
 </div>
 
 <div class="part" data-part="cpu8">
-  <div class="visual-part">
-    <div class="cable-mini cpu8c"></div>
-  </div>
+  <div class="visual-part"><div class="cable-mini cpu8c"></div></div>
   <div>
     <strong>8-pin CPU / EPS</strong>
     <small>CPU power cable</small>
+  </div>
+</div>
+
+<div class="part" data-part="satadata">
+  <div class="visual-part"><div class="sata-data-mini"></div></div>
+  <div>
+    <strong>SATA Data</strong>
+    <small>SSD ↔ Motherboard</small>
+  </div>
+</div>
+
+<div class="part" data-part="satapower">
+  <div class="visual-part"><div class="sata-power-mini"></div></div>
+  <div>
+    <strong>SATA Power</strong>
+    <small>PSU → SSD</small>
   </div>
 </div>
 
@@ -1266,7 +1410,7 @@ button{
 
 <div class="panel-title">
   <h2>🔧 Workbench Pemasangan</h2>
-  <p>Pasang komponen dan kabel mengikut urutan.</p>
+  <p>Pasang komponen dan sambungkan kabel dengan betul.</p>
 </div>
 
 <div class="bench">
@@ -1301,6 +1445,8 @@ button{
 
 <div class="pcie-small"></div>
 
+<div class="sata-caption">SATA PORTS</div>
+
 <div class="sata-bank">
   <div class="sata-port"></div>
   <div class="sata-port"></div>
@@ -1308,44 +1454,32 @@ button{
   <div class="sata-port"></div>
 </div>
 
-<div class="slot cpu-slot" data-slot="cpu">
-  CPU SOCKET
+<div class="slot cpu-slot" data-slot="cpu">CPU SOCKET</div>
+
+<div class="slot thermal-slot" data-slot="thermal">THERMAL</div>
+
+<div class="slot cooler-slot" data-slot="cooler">CPU COOLER</div>
+
+<div class="slot ram-slot" data-slot="ram">DIMM</div>
+
+<div class="slot m2-slot" data-slot="m2">M.2 NVMe</div>
+
+<div class="slot gpu-slot" data-slot="gpu">PCIe x16</div>
+
+<div class="slot drive-slot" data-slot="ssd">SSD BAY</div>
+
+<div class="slot psu-slot" data-slot="psu">PSU BAY</div>
+
+<div class="slot atx24-slot" data-slot="atx24">24-PIN</div>
+
+<div class="slot cpu8-slot" data-slot="cpu8">CPU 8-PIN</div>
+
+<div class="slot sata-data-slot" data-slot="satadata">
+  SATA DATA
 </div>
 
-<div class="slot thermal-slot" data-slot="thermal">
-  THERMAL
-</div>
-
-<div class="slot cooler-slot" data-slot="cooler">
-  CPU COOLER
-</div>
-
-<div class="slot ram-slot" data-slot="ram">
-  DIMM
-</div>
-
-<div class="slot m2-slot" data-slot="m2">
-  M.2 NVMe
-</div>
-
-<div class="slot gpu-slot" data-slot="gpu">
-  PCIe x16
-</div>
-
-<div class="slot drive-slot" data-slot="ssd">
-  SSD BAY
-</div>
-
-<div class="slot psu-slot" data-slot="psu">
-  PSU BAY
-</div>
-
-<div class="slot atx24-slot" data-slot="atx24">
-  24-PIN
-</div>
-
-<div class="slot cpu8-slot" data-slot="cpu8">
-  CPU 8-PIN
+<div class="slot sata-power-slot" data-slot="satapower">
+  SATA POWER
 </div>
 
 <div class="mobo-name">
@@ -1369,7 +1503,7 @@ button{
 <div class="instruction">
 
 <div class="step-number" id="stepNumber">
-  LANGKAH 1 / 10
+  LANGKAH 1 / 12
 </div>
 
 <h3 id="instructionTitle">
@@ -1411,15 +1545,13 @@ button{
 
 </main>
 
-<!-- COMPLETE -->
-
 <div class="complete-screen" id="completeScreen">
 
 <div class="complete-card">
 
 <div class="trophy">🏆</div>
 
-<h2>FASA PEMASANGAN SELESAI!</h2>
+<h2>FASA STORAGE SELESAI!</h2>
 
 <p id="finalResult"></p>
 
@@ -1457,7 +1589,7 @@ const steps = [
   part:"cpu",
   title:"Pasang CPU",
   text:"Pilih CPU dan pasangkan pada CPU Socket motherboard.",
-  tip:"Pastikan tanda segi tiga CPU sejajar dengan penanda socket. Jangan paksa CPU.",
+  tip:"Pastikan tanda segi tiga CPU sejajar dengan penanda socket. Jangan paksa CPU masuk.",
   installed:'<div class="install-hardware cpu">CPU</div>'
 },
 
@@ -1465,7 +1597,7 @@ const steps = [
   part:"thermal",
   title:"Sapukan Thermal Paste",
   text:"Sapukan sedikit thermal paste pada bahagian tengah permukaan CPU.",
-  tip:"Gunakan thermal paste kira-kira sebesar biji kacang. Jangan gunakan terlalu banyak.",
+  tip:"Gunakan thermal paste kira-kira sebesar biji kacang sahaja.",
   installed:'<div class="thermal-installed"></div>'
 },
 
@@ -1473,7 +1605,7 @@ const steps = [
   part:"cooler",
   title:"Pasang CPU Cooler",
   text:"Pasangkan CPU cooler di atas CPU yang telah mempunyai thermal paste.",
-  tip:"Pastikan heatsink duduk rata dan semua skru atau pin diketatkan secara seimbang.",
+  tip:"Pastikan heatsink duduk rata dan diketatkan secara seimbang.",
   installed:'<div class="cooler-installed">CPU FAN</div>'
 },
 
@@ -1481,7 +1613,7 @@ const steps = [
   part:"ram",
   title:"Pasang RAM",
   text:"Pasangkan modul RAM pada slot DIMM motherboard.",
-  tip:"Pastikan takuk RAM sejajar dengan slot sebelum ditekan.",
+  tip:"Pastikan takuk RAM sejajar dengan takuk slot DIMM.",
   installed:'<div class="install-hardware ram"></div>'
 },
 
@@ -1489,7 +1621,7 @@ const steps = [
   part:"m2",
   title:"Pasang M.2 NVMe SSD",
   text:"Pasangkan M.2 NVMe SSD pada slot M.2 motherboard.",
-  tip:"Masukkan modul pada sudut kecil kemudian tekan dan kunci menggunakan skru.",
+  tip:"Masukkan secara menyerong kemudian tekan dan kunci menggunakan skru.",
   installed:'<div class="install-hardware m2">M.2 NVMe</div>'
 },
 
@@ -1497,7 +1629,7 @@ const steps = [
   part:"gpu",
   title:"Pasang Graphics Card",
   text:"Pasangkan kad grafik pada slot PCIe x16 motherboard.",
-  tip:"Pastikan pengunci PCIe terbuka sebelum GPU ditekan masuk.",
+  tip:"Pastikan GPU masuk sepenuhnya dan pengunci PCIe terkunci.",
   installed:'<div class="install-hardware gpu">GRAPHICS CARD</div>'
 },
 
@@ -1505,32 +1637,48 @@ const steps = [
   part:"ssd",
   title:"Pasang SSD SATA",
   text:"Pasangkan SSD SATA 2.5 inci pada SSD Bay.",
-  tip:"SSD ini akan disambungkan kepada SATA Data dan SATA Power pada fasa berikutnya.",
+  tip:"SSD SATA memerlukan dua sambungan: SATA Data dan SATA Power.",
   installed:'<div class="install-hardware ssd">SSD SATA</div>'
 },
 
 {
   part:"psu",
   title:"Pasang Power Supply Unit",
-  text:"Pasangkan PSU pada PSU Bay di dalam casing.",
-  tip:"Pastikan kipas PSU mempunyai laluan udara yang sesuai.",
+  text:"Pasangkan PSU pada PSU Bay.",
+  tip:"Pastikan PSU dipasang kukuh dan kipas mempunyai aliran udara yang sesuai.",
   installed:'<div class="install-hardware psu">POWER SUPPLY</div>'
 },
 
 {
   part:"atx24",
   title:"Sambungkan Kabel 24-pin ATX",
-  text:"Pilih kabel 24-pin ATX daripada PSU dan sambungkan kepada penyambung kuasa utama motherboard.",
-  tip:"Penyambung 24-pin ATX biasanya berada pada bahagian kanan motherboard. Pastikan klip pengunci masuk sepenuhnya.",
+  text:"Sambungkan kabel utama 24-pin daripada PSU kepada motherboard.",
+  tip:"Penyambung 24-pin biasanya berada di bahagian kanan motherboard.",
   installed:'<div class="power-plug">24-PIN</div>'
 },
 
 {
   part:"cpu8",
   title:"Sambungkan Kabel 8-pin CPU / EPS",
-  text:"Pilih kabel CPU 8-pin/EPS dan sambungkan kepada penyambung kuasa CPU motherboard.",
-  tip:"Penyambung CPU/EPS biasanya berada berhampiran bahagian atas motherboard. Jangan tertukar dengan kabel PCIe GPU.",
+  text:"Sambungkan kabel CPU 8-pin/EPS kepada penyambung kuasa CPU.",
+  tip:"Jangan tertukar kabel CPU/EPS dengan kabel PCIe untuk GPU.",
   installed:'<div class="cpu-power-plug">CPU 8-PIN</div>'
+},
+
+{
+  part:"satadata",
+  title:"Sambungkan Kabel SATA Data",
+  text:"Pilih kabel SATA Data dan sambungkan SSD SATA kepada port SATA pada motherboard.",
+  tip:"SATA Data ialah kabel data yang lebih kecil dan menghubungkan SSD/HDD terus ke motherboard.",
+  installed:'<div class="sata-data-installed">SATA DATA</div>'
+},
+
+{
+  part:"satapower",
+  title:"Sambungkan Kabel SATA Power",
+  text:"Pilih kabel SATA Power daripada PSU dan sambungkan kepada SSD SATA.",
+  tip:"SATA Power datang daripada PSU dan membekalkan kuasa elektrik kepada SSD. Jangan tertukar dengan SATA Data.",
+  installed:'<div class="sata-power-installed">SATA POWER</div>'
 }
 
 ];
@@ -1604,7 +1752,7 @@ parts.forEach(part=>{
     feedback.textContent =
     "🔧 " +
     part.querySelector("strong").textContent +
-    " dipilih. Sekarang pilih lokasi pemasangan yang betul.";
+    " dipilih. Sekarang pilih lokasi pemasangan atau sambungan yang betul.";
 
   });
 
@@ -1722,7 +1870,7 @@ function installWrong(slot){
   "feedback error";
 
   feedback.textContent =
-  "❌ Sambungan atau pemasangan tidak tepat. Semak arahan dan cuba lagi.";
+  "❌ Pemasangan atau sambungan tidak tepat. Semak arahan dan cuba lagi.";
 
   updateStatus();
 
@@ -1805,7 +1953,7 @@ function finishSimulation(){
     mistakes:mistakes,
     accuracy:accuracy,
     time:time,
-    version:"V3B",
+    version:"V3C",
     completedAt:new Date().toISOString()
   };
 
@@ -1820,7 +1968,7 @@ function finishSimulation(){
   studentData.name +
   "</strong>!<br><br>" +
 
-  "Komponen asas dan sambungan kuasa motherboard telah selesai.<br><br>" +
+  "Pemasangan komponen, kuasa motherboard dan sambungan storan telah selesai.<br><br>" +
 
   "Skor: <strong>" +
   score +
