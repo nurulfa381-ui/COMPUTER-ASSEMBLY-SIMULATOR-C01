@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Workbench V3C | Computer Assembly Simulator C01</title>
+<title>Workbench V3D | Computer Assembly Simulator C01</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,7 +174,7 @@ main{
   color:var(--muted);
 }
 
-/* COMPONENT PANEL */
+/* COMPONENTS */
 
 .parts{
   padding:13px;
@@ -183,7 +183,7 @@ main{
 }
 
 .part{
-  min-height:72px;
+  min-height:70px;
   padding:10px 12px;
   display:flex;
   align-items:center;
@@ -214,13 +214,13 @@ main{
 
 .part strong{
   display:block;
-  font-size:.75rem;
+  font-size:.74rem;
 }
 
 .part small{
   display:block;
   margin-top:2px;
-  font-size:.61rem;
+  font-size:.60rem;
   color:#a9c0da;
 }
 
@@ -233,20 +233,30 @@ main{
   position:relative;
 }
 
+/* VISUALS */
+
+.simple-chip{
+  width:44px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  border:2px solid #75818b;
+  background:#252e35;
+  font:bold 8px Montserrat;
+  color:white;
+}
+
 .cpu-mini{
   width:42px;
   height:42px;
   border-radius:5px;
   background:linear-gradient(135deg,#bfc6cd,#77828e);
   border:3px solid #d9dfe4;
-  box-shadow:inset 0 0 0 2px #49535c;
-}
-
-.cpu-mini:after{
-  content:"CPU";
-  position:absolute;
+  display:grid;
+  place-items:center;
+  color:#26313a;
   font:bold 8px Montserrat;
-  color:#25313c;
 }
 
 .thermal-mini{
@@ -255,18 +265,6 @@ main{
   border-radius:6px;
   background:#d7dadd;
   border:3px solid #8d979f;
-  position:relative;
-}
-
-.thermal-mini:before{
-  content:"";
-  position:absolute;
-  width:10px;
-  height:10px;
-  top:-9px;
-  left:2px;
-  background:#68727a;
-  border-radius:2px;
 }
 
 .cooler-mini{
@@ -289,35 +287,8 @@ main{
 .ram-mini{
   width:55px;
   height:18px;
-  border-radius:2px;
   background:#165f35;
   border:2px solid #30925c;
-  position:relative;
-}
-
-.ram-mini:before{
-  content:"";
-  position:absolute;
-  left:4px;
-  top:3px;
-  width:7px;
-  height:8px;
-  background:#1d252d;
-  box-shadow:
-    10px 0 #1d252d,
-    20px 0 #1d252d,
-    30px 0 #1d252d,
-    40px 0 #1d252d;
-}
-
-.ram-mini:after{
-  content:"";
-  position:absolute;
-  bottom:-5px;
-  left:4px;
-  width:45px;
-  height:4px;
-  background:repeating-linear-gradient(90deg,#d5b64c 0 4px,transparent 4px 6px);
 }
 
 .m2-mini{
@@ -325,35 +296,11 @@ main{
   height:19px;
   background:#174f3b;
   border:2px solid #38735d;
-  border-radius:2px;
-  position:relative;
-}
-
-.m2-mini:before{
-  content:"";
-  position:absolute;
-  width:13px;
-  height:10px;
-  left:6px;
-  top:3px;
-  background:#161d24;
-  box-shadow:16px 0 #161d24;
-}
-
-.m2-mini:after{
-  content:"";
-  position:absolute;
-  right:-5px;
-  top:3px;
-  width:5px;
-  height:12px;
-  background:#d6b64d;
 }
 
 .gpu-mini{
   width:58px;
   height:34px;
-  border-radius:4px;
   background:#242d36;
   border:2px solid #46525e;
   position:relative;
@@ -371,65 +318,29 @@ main{
   box-shadow:22px 0 0 -3px #242d36,22px 0 0 0 #6f7d88;
 }
 
-.gpu-mini:after{
-  content:"";
-  position:absolute;
-  bottom:-5px;
-  left:10px;
-  width:36px;
-  height:4px;
-  background:#d7b74e;
-}
-
 .ssd-mini{
   width:48px;
   height:38px;
+  display:grid;
+  place-items:center;
   border-radius:4px;
   background:linear-gradient(135deg,#535d67,#222b33);
   border:2px solid #7a8792;
-  position:relative;
-}
-
-.ssd-mini:after{
-  content:"SSD";
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font:bold 9px Montserrat;
   color:white;
+  font:bold 9px Montserrat;
 }
 
 .psu-mini{
   width:50px;
   height:42px;
+  display:grid;
+  place-items:center;
   border-radius:4px;
   background:#242b31;
   border:2px solid #68727c;
-  position:relative;
-}
-
-.psu-mini:before{
-  content:"";
-  position:absolute;
-  width:28px;
-  height:28px;
-  border:3px solid #9099a1;
-  border-radius:50%;
-  left:8px;
-  top:5px;
-}
-
-.psu-mini:after{
-  content:"PSU";
-  position:absolute;
-  right:2px;
-  bottom:1px;
-  font:bold 6px Montserrat;
   color:white;
+  font:bold 8px Montserrat;
 }
-
-/* POWER CABLES */
 
 .cable-mini{
   width:55px;
@@ -460,7 +371,7 @@ main{
   place-items:center;
   background:#20282e;
   border:2px solid #77828a;
-  color:#fff;
+  color:white;
   font:bold 7px Montserrat;
 }
 
@@ -475,11 +386,9 @@ main{
   place-items:center;
   background:#20282e;
   border:2px solid #77828a;
-  color:#fff;
+  color:white;
   font:bold 7px Montserrat;
 }
-
-/* SATA DATA MINI */
 
 .sata-data-mini{
   width:58px;
@@ -496,7 +405,6 @@ main{
   top:8px;
   border-bottom:4px solid #e44747;
   border-left:4px solid #e44747;
-  border-radius:0 0 0 12px;
 }
 
 .sata-data-mini:after{
@@ -504,17 +412,14 @@ main{
   position:absolute;
   right:0;
   bottom:1px;
-  width:29px;
+  width:30px;
   height:15px;
   display:grid;
   place-items:center;
   background:#1b2025;
   border:2px solid #666f76;
-  color:#fff;
   font:bold 6px Montserrat;
 }
-
-/* SATA POWER MINI */
 
 .sata-power-mini{
   width:58px;
@@ -532,7 +437,6 @@ main{
   border-bottom:6px solid #f4d23c;
   border-left:6px solid #d83b3b;
   border-right:6px solid #171717;
-  border-radius:0 0 9px 9px;
 }
 
 .sata-power-mini:after{
@@ -546,14 +450,103 @@ main{
   place-items:center;
   background:#1b2025;
   border:2px solid #666f76;
-  color:#fff;
   font:bold 6px Montserrat;
+}
+
+.pcie-power-mini{
+  width:58px;
+  height:42px;
+  position:relative;
+}
+
+.pcie-power-mini:before{
+  content:"";
+  position:absolute;
+  width:42px;
+  left:3px;
+  top:13px;
+  border-top:6px solid #171717;
+}
+
+.pcie-power-mini:after{
+  content:"6+2";
+  position:absolute;
+  right:0;
+  top:8px;
+  width:27px;
+  height:21px;
+  display:grid;
+  place-items:center;
+  background:#232b31;
+  border:2px solid #808a91;
+  font:bold 7px Montserrat;
+}
+
+.fan-header-mini{
+  width:54px;
+  height:40px;
+  position:relative;
+}
+
+.fan-header-mini:before{
+  content:"";
+  position:absolute;
+  width:35px;
+  height:5px;
+  left:2px;
+  top:19px;
+  background:#171717;
+}
+
+.fan-header-mini:after{
+  content:"FAN";
+  position:absolute;
+  right:0;
+  top:11px;
+  width:27px;
+  height:19px;
+  display:grid;
+  place-items:center;
+  background:#ddd;
+  border:2px solid #777;
+  color:#222;
+  font:bold 6px Montserrat;
+}
+
+.front-panel-mini{
+  width:56px;
+  height:40px;
+  position:relative;
+}
+
+.front-panel-mini:before{
+  content:"";
+  position:absolute;
+  width:35px;
+  height:5px;
+  left:2px;
+  top:18px;
+  background:#5fbdff;
+}
+
+.front-panel-mini:after{
+  content:"PWR SW";
+  position:absolute;
+  right:0;
+  top:10px;
+  width:34px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  background:#20272d;
+  border:2px solid #6e7880;
+  font:bold 5px Montserrat;
 }
 
 /* BENCH */
 
 .bench{
-  min-height:740px;
+  min-height:760px;
   padding:16px;
   overflow:auto;
   background:
@@ -571,32 +564,29 @@ main{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  font-size:.67rem;
-  color:#c4d7eb;
   margin-bottom:13px;
+  color:#c4d7eb;
+  font-size:.67rem;
 }
 
 .pc-case{
   position:relative;
-  width:800px;
-  min-height:630px;
+  width:820px;
+  min-height:650px;
   margin:0 auto;
   padding:34px 36px;
   border-radius:22px;
   border:8px solid #263847;
   background:linear-gradient(145deg,#111a22,#0a1117);
-  box-shadow:
-    inset 0 0 0 3px #05090d,
-    0 20px 45px rgba(0,0,0,.35);
 }
 
 .case-label{
   position:absolute;
-  left:50%;
   top:8px;
+  left:50%;
   transform:translateX(-50%);
-  font-size:.55rem;
   color:#7e909f;
+  font-size:.55rem;
   letter-spacing:1.6px;
 }
 
@@ -607,43 +597,8 @@ main{
   border-radius:14px;
   background:
     linear-gradient(135deg,rgba(255,255,255,.04),transparent 35%),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 22px,
-      rgba(255,255,255,.015) 22px 23px
-    ),
     var(--board);
   border:4px solid #2b766e;
-  box-shadow:
-    inset 0 0 0 2px #0c302d,
-    0 10px 22px rgba(0,0,0,.28);
-}
-
-.trace{
-  position:absolute;
-  height:2px;
-  background:rgba(198,224,215,.22);
-}
-
-.trace.t1{
-  width:110px;
-  left:55px;
-  top:60px;
-  transform:rotate(25deg);
-}
-
-.trace.t2{
-  width:140px;
-  left:240px;
-  top:220px;
-  transform:rotate(-18deg);
-}
-
-.trace.t3{
-  width:170px;
-  left:90px;
-  bottom:90px;
-  transform:rotate(7deg);
 }
 
 .io-block{
@@ -657,50 +612,19 @@ main{
   border-left:0;
 }
 
-.io-block:before{
-  content:"I/O";
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font:bold 9px Montserrat;
-  color:#303841;
-  writing-mode:vertical-rl;
-}
-
-.vrm{
-  position:absolute;
-  left:105px;
-  top:38px;
-  width:38px;
-  height:26px;
-  background:#1f262d;
-  border-radius:3px;
-  box-shadow:
-    42px 0 #1f262d,
-    84px 0 #1f262d,
-    0 32px #1f262d;
-}
-
 .chipset{
   position:absolute;
   width:70px;
   height:70px;
   left:240px;
   bottom:72px;
+  display:grid;
+  place-items:center;
   background:#1d262c;
   border:5px solid #434f57;
   border-radius:7px;
-}
-
-.chipset:after{
-  content:"CHIPSET";
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font:bold 7px Montserrat;
   color:#aeb9c0;
+  font:bold 7px Montserrat;
 }
 
 .dimm-real{
@@ -716,17 +640,6 @@ main{
   height:190px;
   background:#192127;
   border:2px solid #68767e;
-  border-radius:2px;
-}
-
-.pcie-small{
-  position:absolute;
-  left:105px;
-  bottom:130px;
-  width:125px;
-  height:16px;
-  background:#d9e2e5;
-  border:2px solid #9eabad;
 }
 
 .sata-bank{
@@ -744,37 +657,27 @@ main{
   border:2px solid #718087;
 }
 
-.sata-caption{
-  position:absolute;
-  right:13px;
-  bottom:110px;
-  font:bold 7px Montserrat;
-  color:#a8d9d2;
-}
-
 .mobo-name{
   position:absolute;
   left:18px;
   bottom:15px;
   color:#8ed0c5;
   font:bold 10px Montserrat;
-  letter-spacing:1px;
 }
 
-/* DROP SLOTS */
+/* SLOTS */
 
 .slot{
   position:absolute;
   border:2px dashed rgba(255,255,255,.4);
   border-radius:9px;
   color:#eefcff;
-  font-size:.56rem;
+  font-size:.55rem;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
   padding:5px;
-  transition:.2s;
   cursor:pointer;
   z-index:5;
 }
@@ -801,262 +704,94 @@ main{
   to{box-shadow:0 0 20px rgba(255,159,26,.55)}
 }
 
-.cpu-slot{
-  width:108px;
-  height:108px;
-  left:165px;
-  top:96px;
-}
+.cpu-slot{width:108px;height:108px;left:165px;top:96px;}
+.thermal-slot{width:54px;height:54px;left:192px;top:123px;border-radius:50%;z-index:8;}
+.cooler-slot{width:135px;height:135px;left:151px;top:82px;border-radius:50%;z-index:7;}
+.ram-slot{width:28px;height:188px;right:105px;top:58px;}
+.m2-slot{width:165px;height:34px;left:182px;top:278px;}
+.gpu-slot{width:245px;height:37px;left:90px;top:350px;}
+.drive-slot{width:150px;height:90px;left:575px;top:78px;background:#171f25;}
+.psu-slot{width:155px;height:120px;left:590px;bottom:45px;background:#151c22;}
+.atx24-slot{width:45px;height:102px;right:-1px;top:202px;background:#161f25;}
+.cpu8-slot{width:72px;height:38px;left:70px;top:-5px;background:#161f25;}
+.sata-data-slot{width:76px;height:40px;right:5px;bottom:45px;background:#161f25;}
+.sata-power-slot{width:105px;height:34px;left:595px;top:138px;background:#161f25;}
 
-.thermal-slot{
-  width:54px;
-  height:54px;
-  left:192px;
-  top:123px;
-  border-radius:50%;
-  z-index:8;
-}
+/* NEW V3D SLOTS */
 
-.cooler-slot{
-  width:135px;
-  height:135px;
-  left:151px;
-  top:82px;
-  border-radius:50%;
-  z-index:7;
-}
-
-.ram-slot{
-  width:28px;
-  height:188px;
-  right:105px;
-  top:58px;
-}
-
-.m2-slot{
-  width:165px;
+.gpu-power-slot{
+  width:96px;
   height:34px;
-  left:182px;
-  top:278px;
-}
-
-.gpu-slot{
-  width:245px;
-  height:37px;
-  left:90px;
-  top:350px;
-}
-
-.drive-slot{
-  width:150px;
-  height:90px;
-  left:575px;
-  top:78px;
-  background:#171f25;
-}
-
-.psu-slot{
-  width:155px;
-  height:120px;
-  left:575px;
-  bottom:45px;
-  background:#151c22;
-}
-
-.atx24-slot{
-  width:45px;
-  height:102px;
-  right:-1px;
-  top:202px;
+  left:180px;
+  top:330px;
+  z-index:20;
   background:#161f25;
-  z-index:12;
 }
 
-.cpu8-slot{
-  width:72px;
-  height:38px;
-  left:70px;
-  top:-5px;
+.cpu-fan-slot{
+  width:78px;
+  height:34px;
+  left:295px;
+  top:105px;
+  z-index:20;
   background:#161f25;
-  z-index:12;
 }
 
-/* SATA DATA CONNECTOR ON MOTHERBOARD */
-
-.sata-data-slot{
-  width:76px;
-  height:40px;
-  right:5px;
-  bottom:45px;
-  background:#161f25;
-  z-index:15;
-}
-
-/* SATA POWER CONNECTOR ON SSD */
-
-.sata-power-slot{
+.front-panel-slot{
   width:105px;
-  height:34px;
-  left:595px;
-  top:138px;
+  height:38px;
+  right:10px;
+  bottom:8px;
+  z-index:20;
   background:#161f25;
-  z-index:16;
 }
 
-/* INSTALLED HARDWARE */
+/* INSTALLED */
 
-.install-hardware{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.install{
   width:100%;
   height:100%;
-}
-
-.install-hardware.cpu{
-  background:linear-gradient(135deg,#c9d1d7,#78838d);
-  border:4px solid #e0e5e9;
-  color:#26323b;
-  font:bold 10px Montserrat;
-}
-
-.install-hardware.ram{
-  background:#19633a;
-  border:3px solid #2f915b;
-}
-
-.install-hardware.m2{
-  background:#164d39;
-  border:3px solid #38735d;
-  color:#dfeee8;
-  font:bold 8px Montserrat;
-}
-
-.install-hardware.gpu{
-  background:#242d36;
-  border:3px solid #5a6671;
+  display:grid;
+  place-items:center;
+  border-radius:5px;
+  background:#232b31;
+  border:3px solid #78848d;
   color:white;
-  font:bold 9px Montserrat;
+  font:bold 7px Montserrat;
 }
 
-.install-hardware.ssd{
-  background:linear-gradient(135deg,#5b646c,#222a31);
-  border:3px solid #7f8b94;
-  color:white;
-  font:bold 9px Montserrat;
-}
-
-.install-hardware.psu{
-  background:#232a30;
-  border:3px solid #737e87;
-  color:white;
-  font:bold 9px Montserrat;
-}
+.install.cpu{background:linear-gradient(135deg,#c9d1d7,#78838d);color:#222;}
+.install.ram{background:#19633a;}
+.install.m2{background:#164d39;}
+.install.gpu{background:#242d36;}
+.install.ssd{background:#3a434a;}
+.install.psu{background:#232a30;}
 
 .thermal-installed{
   width:22px;
   height:22px;
   border-radius:50%;
   background:#d8dadd;
-  border:2px solid #f3f3f3;
+  border:2px solid white;
 }
 
 .cooler-installed{
   width:100%;
   height:100%;
   border-radius:50%;
-  background:#252d34;
-  border:6px solid #75818a;
   display:grid;
   place-items:center;
+  background:#252d34;
+  border:6px solid #75818a;
   color:white;
   font:bold 8px Montserrat;
 }
 
-.power-plug{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  border-radius:5px;
-  background:#1c242a;
-  border:3px solid #77848d;
-  color:white;
-  font:bold 7px Montserrat;
-}
-
-.cpu-power-plug{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  border-radius:5px;
-  background:#1c242a;
-  border:3px solid #77848d;
-  color:white;
-  font:bold 7px Montserrat;
-}
-
-/* INSTALLED SATA DATA */
-
-.sata-data-installed{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  border-radius:5px;
-  background:#1c242a;
-  border:3px solid #e34a4a;
-  color:white;
-  font:bold 7px Montserrat;
-  position:relative;
-}
-
-.sata-data-installed:after{
-  content:"";
-  position:absolute;
-  width:110px;
-  height:4px;
-  background:#e34a4a;
-  right:-104px;
-  top:50%;
-  transform:translateY(-50%);
-  border-radius:8px;
-}
-
-/* INSTALLED SATA POWER */
-
-.sata-power-installed{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  border-radius:5px;
-  background:#1c242a;
-  border:3px solid #d0b734;
-  color:white;
-  font:bold 7px Montserrat;
-  position:relative;
-}
-
-.sata-power-installed:after{
-  content:"";
-  position:absolute;
-  width:115px;
-  height:8px;
-  background:
-    linear-gradient(
-      to bottom,
-      #e6ce42 0 25%,
-      #d53a3a 25% 50%,
-      #171717 50% 75%,
-      #e6ce42 75% 100%
-    );
-  right:-108px;
-  top:50%;
-  transform:translateY(-50%);
-  border-radius:8px;
-}
+.install-sata-data{border-color:#e34a4a;}
+.install-sata-power{border-color:#d0b734;}
+.install-gpu-power{border-color:#6c83ff;}
+.install-fan{border-color:#ddd;color:#dff7ff;}
+.install-front{border-color:#59bfff;}
 
 /* INSTRUCTION */
 
@@ -1115,7 +850,6 @@ main{
   background:#071b35;
   color:#bdd1e8;
   font-size:.71rem;
-  line-height:1.55;
 }
 
 .feedback.success{
@@ -1139,20 +873,11 @@ button{
   border-radius:13px;
   padding:12px;
   cursor:pointer;
-  font:700 .74rem 'Poppins',sans-serif;
+  font:700 .74rem 'Poppins';
 }
 
-.reset{
-  background:#18375e;
-  color:white;
-}
-
-.logout{
-  background:#301b2a;
-  color:#ffb6b6;
-}
-
-/* COMPLETE */
+.reset{background:#18375e;color:white;}
+.logout{background:#301b2a;color:#ffb6b6;}
 
 .complete-screen{
   display:none;
@@ -1161,8 +886,8 @@ button{
   z-index:100;
   align-items:center;
   justify-content:center;
-  padding:20px;
   background:rgba(2,9,22,.94);
+  padding:20px;
 }
 
 .complete-card{
@@ -1171,16 +896,11 @@ button{
   border-radius:25px;
   text-align:center;
   background:#0e294f;
-  border:1px solid rgba(255,255,255,.13);
-}
-
-.complete-card .trophy{
-  font-size:4rem;
 }
 
 .complete-card h2{
   margin:12px 0;
-  font:800 1.8rem 'Montserrat',sans-serif;
+  font:800 1.8rem 'Montserrat';
   color:var(--green);
 }
 
@@ -1198,13 +918,8 @@ button{
 }
 
 @media(max-width:1150px){
-  .workspace{
-    grid-template-columns:240px 1fr;
-  }
-
-  .instruction-panel{
-    grid-column:1/-1;
-  }
+  .workspace{grid-template-columns:240px 1fr;}
+  .instruction-panel{grid-column:1/-1;}
 }
 
 @media(max-width:760px){
@@ -1214,352 +929,268 @@ button{
     align-items:flex-start;
   }
 
-  .statusbar{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .status-card:first-child{
-    grid-column:1/-1;
-  }
-
-  .workspace{
-    grid-template-columns:1fr;
-  }
-
-  .parts{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .instruction-panel{
-    grid-column:auto;
-  }
+  .statusbar{grid-template-columns:1fr 1fr;}
+  .status-card:first-child{grid-column:1/-1;}
+  .workspace{grid-template-columns:1fr;}
+  .parts{grid-template-columns:repeat(2,1fr);}
+  .instruction-panel{grid-column:auto;}
 }
 
-@media(max-width:480px){
-  main{
-    padding:10px;
-  }
-}
 </style>
 </head>
 
 <body>
 
 <header>
-
-<div class="brand">
-  <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
-  <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3C</p>
-</div>
-
-<div class="student">
-  <div class="avatar">👨‍💻</div>
-  <div>
-    <strong id="studentName">Pelajar</strong>
-    <small id="studentInfo">ID • Kelas</small>
+  <div class="brand">
+    <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
+    <p>IT-020-3:2013-C01 • Workbench Pemasangan Komputer V3D</p>
   </div>
-</div>
 
+  <div class="student">
+    <div class="avatar">👨‍💻</div>
+    <div>
+      <strong id="studentName">Pelajar</strong>
+      <small id="studentInfo">ID • Kelas</small>
+    </div>
+  </div>
 </header>
 
 <main>
 
 <section class="statusbar">
 
-<div class="status-card">
-  <small>KEMAJUAN PEMASANGAN</small>
-  <strong id="progressText">0 / 12 langkah</strong>
-
-  <div class="progress-wrap">
-    <div id="progress"></div>
+  <div class="status-card">
+    <small>KEMAJUAN PEMASANGAN</small>
+    <strong id="progressText">0 / 15 langkah</strong>
+    <div class="progress-wrap"><div id="progress"></div></div>
   </div>
-</div>
 
-<div class="status-card">
-  <small>SKOR</small>
-  <strong id="score">0</strong>
-</div>
+  <div class="status-card">
+    <small>SKOR</small>
+    <strong id="score">0</strong>
+  </div>
 
-<div class="status-card">
-  <small>KESALAHAN</small>
-  <strong id="mistakes">0</strong>
-</div>
+  <div class="status-card">
+    <small>KESALAHAN</small>
+    <strong id="mistakes">0</strong>
+  </div>
 
-<div class="status-card">
-  <small>MASA</small>
-  <strong id="timer">00:00</strong>
-</div>
+  <div class="status-card">
+    <small>MASA</small>
+    <strong id="timer">00:00</strong>
+  </div>
 
 </section>
 
 <section class="workspace">
 
-<!-- COMPONENT PANEL -->
+<div class="panel">
+  <div class="panel-title">
+    <h2>🧰 Komponen & Kabel</h2>
+    <p>Pilih item mengikut arahan.</p>
+  </div>
+
+  <div class="parts">
+
+    <div class="part" data-part="cpu">
+      <div class="visual-part"><div class="cpu-mini">CPU</div></div>
+      <div><strong>CPU</strong><small>Processor</small></div>
+    </div>
+
+    <div class="part" data-part="thermal">
+      <div class="visual-part"><div class="thermal-mini"></div></div>
+      <div><strong>Thermal Paste</strong><small>Pes haba CPU</small></div>
+    </div>
+
+    <div class="part" data-part="cooler">
+      <div class="visual-part"><div class="cooler-mini"></div></div>
+      <div><strong>CPU Cooler</strong><small>Heatsink + Fan</small></div>
+    </div>
+
+    <div class="part" data-part="ram">
+      <div class="visual-part"><div class="ram-mini"></div></div>
+      <div><strong>RAM</strong><small>Memory module</small></div>
+    </div>
+
+    <div class="part" data-part="m2">
+      <div class="visual-part"><div class="m2-mini"></div></div>
+      <div><strong>M.2 NVMe</strong><small>SSD</small></div>
+    </div>
+
+    <div class="part" data-part="gpu">
+      <div class="visual-part"><div class="gpu-mini"></div></div>
+      <div><strong>Graphics Card</strong><small>GPU</small></div>
+    </div>
+
+    <div class="part" data-part="ssd">
+      <div class="visual-part"><div class="ssd-mini">SSD</div></div>
+      <div><strong>SSD SATA</strong><small>2.5"</small></div>
+    </div>
+
+    <div class="part" data-part="psu">
+      <div class="visual-part"><div class="psu-mini">PSU</div></div>
+      <div><strong>Power Supply</strong><small>PSU</small></div>
+    </div>
+
+    <div class="part" data-part="atx24">
+      <div class="visual-part"><div class="cable-mini atx"></div></div>
+      <div><strong>24-pin ATX</strong><small>Main power</small></div>
+    </div>
+
+    <div class="part" data-part="cpu8">
+      <div class="visual-part"><div class="cable-mini cpu8c"></div></div>
+      <div><strong>8-pin CPU / EPS</strong><small>CPU power</small></div>
+    </div>
+
+    <div class="part" data-part="satadata">
+      <div class="visual-part"><div class="sata-data-mini"></div></div>
+      <div><strong>SATA Data</strong><small>SSD ↔ Board</small></div>
+    </div>
+
+    <div class="part" data-part="satapower">
+      <div class="visual-part"><div class="sata-power-mini"></div></div>
+      <div><strong>SATA Power</strong><small>PSU → SSD</small></div>
+    </div>
+
+    <div class="part" data-part="gpupower">
+      <div class="visual-part"><div class="pcie-power-mini"></div></div>
+      <div><strong>PCIe GPU Power</strong><small>6+2 pin</small></div>
+    </div>
+
+    <div class="part" data-part="cpufan">
+      <div class="visual-part"><div class="fan-header-mini"></div></div>
+      <div><strong>CPU Fan Cable</strong><small>CPU_FAN header</small></div>
+    </div>
+
+    <div class="part" data-part="frontpanel">
+      <div class="visual-part"><div class="front-panel-mini"></div></div>
+      <div><strong>Power SW</strong><small>Front Panel</small></div>
+    </div>
+
+  </div>
+</div>
+
 
 <div class="panel">
+  <div class="panel-title">
+    <h2>🔧 Workbench</h2>
+    <p>Pasang komponen dan semua sambungan dengan betul.</p>
+  </div>
 
-<div class="panel-title">
-  <h2>🧰 Komponen & Kabel</h2>
-  <p>Pilih item mengikut arahan teknikal.</p>
-</div>
+  <div class="bench">
 
-<div class="parts">
+    <div class="bench-label">
+      <span>⚠️ Ikuti urutan.</span>
+      <span>ESD SAFE WORK AREA</span>
+    </div>
 
-<div class="part" data-part="cpu">
-  <div class="visual-part"><div class="cpu-mini"></div></div>
-  <div>
-    <strong>CPU / Processor</strong>
-    <small>Pemproses utama</small>
+    <div class="pc-case">
+
+      <div class="case-label">ATX COMPUTER CASE</div>
+
+      <div class="motherboard">
+
+        <div class="io-block"></div>
+        <div class="chipset">CHIPSET</div>
+
+        <div class="dimm-real">
+          <div class="dimm"></div>
+          <div class="dimm"></div>
+          <div class="dimm"></div>
+          <div class="dimm"></div>
+        </div>
+
+        <div class="sata-bank">
+          <div class="sata-port"></div>
+          <div class="sata-port"></div>
+          <div class="sata-port"></div>
+          <div class="sata-port"></div>
+        </div>
+
+        <div class="slot cpu-slot" data-slot="cpu">CPU SOCKET</div>
+        <div class="slot thermal-slot" data-slot="thermal">THERMAL</div>
+        <div class="slot cooler-slot" data-slot="cooler">CPU COOLER</div>
+        <div class="slot ram-slot" data-slot="ram">DIMM</div>
+        <div class="slot m2-slot" data-slot="m2">M.2</div>
+        <div class="slot gpu-slot" data-slot="gpu">PCIe x16</div>
+        <div class="slot drive-slot" data-slot="ssd">SSD BAY</div>
+        <div class="slot psu-slot" data-slot="psu">PSU BAY</div>
+        <div class="slot atx24-slot" data-slot="atx24">24-PIN</div>
+        <div class="slot cpu8-slot" data-slot="cpu8">CPU 8-PIN</div>
+        <div class="slot sata-data-slot" data-slot="satadata">SATA DATA</div>
+        <div class="slot sata-power-slot" data-slot="satapower">SATA POWER</div>
+
+        <div class="slot gpu-power-slot" data-slot="gpupower">
+          GPU POWER
+        </div>
+
+        <div class="slot cpu-fan-slot" data-slot="cpufan">
+          CPU_FAN
+        </div>
+
+        <div class="slot front-panel-slot" data-slot="frontpanel">
+          PWR SW
+        </div>
+
+        <div class="mobo-name">
+          ATX MOTHERBOARD • C01 TRAINING BOARD
+        </div>
+
+      </div>
+
+    </div>
   </div>
 </div>
 
-<div class="part" data-part="thermal">
-  <div class="visual-part"><div class="thermal-mini"></div></div>
-  <div>
-    <strong>Thermal Paste</strong>
-    <small>Pes haba CPU</small>
-  </div>
-</div>
-
-<div class="part" data-part="cooler">
-  <div class="visual-part"><div class="cooler-mini"></div></div>
-  <div>
-    <strong>CPU Cooler</strong>
-    <small>Heatsink + fan</small>
-  </div>
-</div>
-
-<div class="part" data-part="ram">
-  <div class="visual-part"><div class="ram-mini"></div></div>
-  <div>
-    <strong>RAM</strong>
-    <small>Memory module</small>
-  </div>
-</div>
-
-<div class="part" data-part="m2">
-  <div class="visual-part"><div class="m2-mini"></div></div>
-  <div>
-    <strong>M.2 NVMe SSD</strong>
-    <small>PCIe storage</small>
-  </div>
-</div>
-
-<div class="part" data-part="gpu">
-  <div class="visual-part"><div class="gpu-mini"></div></div>
-  <div>
-    <strong>Graphics Card</strong>
-    <small>PCIe x16 GPU</small>
-  </div>
-</div>
-
-<div class="part" data-part="ssd">
-  <div class="visual-part"><div class="ssd-mini"></div></div>
-  <div>
-    <strong>SSD SATA</strong>
-    <small>2.5 inch drive</small>
-  </div>
-</div>
-
-<div class="part" data-part="psu">
-  <div class="visual-part"><div class="psu-mini"></div></div>
-  <div>
-    <strong>Power Supply</strong>
-    <small>PSU unit</small>
-  </div>
-</div>
-
-<div class="part" data-part="atx24">
-  <div class="visual-part"><div class="cable-mini atx"></div></div>
-  <div>
-    <strong>24-pin ATX</strong>
-    <small>Main motherboard power</small>
-  </div>
-</div>
-
-<div class="part" data-part="cpu8">
-  <div class="visual-part"><div class="cable-mini cpu8c"></div></div>
-  <div>
-    <strong>8-pin CPU / EPS</strong>
-    <small>CPU power cable</small>
-  </div>
-</div>
-
-<div class="part" data-part="satadata">
-  <div class="visual-part"><div class="sata-data-mini"></div></div>
-  <div>
-    <strong>SATA Data</strong>
-    <small>SSD ↔ Motherboard</small>
-  </div>
-</div>
-
-<div class="part" data-part="satapower">
-  <div class="visual-part"><div class="sata-power-mini"></div></div>
-  <div>
-    <strong>SATA Power</strong>
-    <small>PSU → SSD</small>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- WORKBENCH -->
-
-<div class="panel">
-
-<div class="panel-title">
-  <h2>🔧 Workbench Pemasangan</h2>
-  <p>Pasang komponen dan sambungkan kabel dengan betul.</p>
-</div>
-
-<div class="bench">
-
-<div class="bench-label">
-  <span>⚠️ Ikuti arahan satu demi satu.</span>
-  <span>ESD SAFE WORK AREA</span>
-</div>
-
-<div class="pc-case">
-
-<div class="case-label">
-  ATX COMPUTER CASE • SIDE PANEL REMOVED
-</div>
-
-<div class="motherboard">
-
-<div class="trace t1"></div>
-<div class="trace t2"></div>
-<div class="trace t3"></div>
-
-<div class="io-block"></div>
-<div class="vrm"></div>
-<div class="chipset"></div>
-
-<div class="dimm-real">
-  <div class="dimm"></div>
-  <div class="dimm"></div>
-  <div class="dimm"></div>
-  <div class="dimm"></div>
-</div>
-
-<div class="pcie-small"></div>
-
-<div class="sata-caption">SATA PORTS</div>
-
-<div class="sata-bank">
-  <div class="sata-port"></div>
-  <div class="sata-port"></div>
-  <div class="sata-port"></div>
-  <div class="sata-port"></div>
-</div>
-
-<div class="slot cpu-slot" data-slot="cpu">CPU SOCKET</div>
-
-<div class="slot thermal-slot" data-slot="thermal">THERMAL</div>
-
-<div class="slot cooler-slot" data-slot="cooler">CPU COOLER</div>
-
-<div class="slot ram-slot" data-slot="ram">DIMM</div>
-
-<div class="slot m2-slot" data-slot="m2">M.2 NVMe</div>
-
-<div class="slot gpu-slot" data-slot="gpu">PCIe x16</div>
-
-<div class="slot drive-slot" data-slot="ssd">SSD BAY</div>
-
-<div class="slot psu-slot" data-slot="psu">PSU BAY</div>
-
-<div class="slot atx24-slot" data-slot="atx24">24-PIN</div>
-
-<div class="slot cpu8-slot" data-slot="cpu8">CPU 8-PIN</div>
-
-<div class="slot sata-data-slot" data-slot="satadata">
-  SATA DATA
-</div>
-
-<div class="slot sata-power-slot" data-slot="satapower">
-  SATA POWER
-</div>
-
-<div class="mobo-name">
-  ATX MOTHERBOARD • C01 TRAINING BOARD
-</div>
-
-</div>
-</div>
-</div>
-</div>
-
-<!-- INSTRUCTION -->
 
 <div class="panel instruction-panel">
 
-<div class="panel-title">
-  <h2>📋 Arahan Teknikal</h2>
-  <p>Ikuti setiap langkah pemasangan.</p>
-</div>
+  <div class="panel-title">
+    <h2>📋 Arahan Teknikal</h2>
+    <p>Ikuti langkah pemasangan.</p>
+  </div>
 
-<div class="instruction">
+  <div class="instruction">
 
-<div class="step-number" id="stepNumber">
-  LANGKAH 1 / 12
-</div>
+    <div class="step-number" id="stepNumber">
+      LANGKAH 1 / 15
+    </div>
 
-<h3 id="instructionTitle">
-  Pasang CPU
-</h3>
+    <h3 id="instructionTitle">Pasang CPU</h3>
 
-<p id="instructionText">
-  Pilih CPU dan pasangkan pada CPU Socket motherboard.
-</p>
+    <p id="instructionText">
+      Pilih CPU dan pasangkan pada socket.
+    </p>
 
-<div class="tip">
-  <strong>💡 TIP JURUTEKNIK</strong>
-  <p id="tipText">
-    Pastikan tanda segi tiga CPU sejajar dengan tanda socket.
-  </p>
-</div>
+    <div class="tip">
+      <strong>💡 TIP JURUTEKNIK</strong>
+      <p id="tipText"></p>
+    </div>
 
-<div class="feedback" id="feedback">
-  👨‍🔧 Sistem bersedia. Mulakan pemasangan.
-</div>
+    <div class="feedback" id="feedback">
+      👨‍🔧 Sistem bersedia.
+    </div>
 
-</div>
+  </div>
 
-<div class="controls">
-
-<button class="reset" id="resetBtn">
-  ↻ MULAKAN SEMULA
-</button>
-
-<button class="logout" id="logoutBtn">
-  🚪 LOGOUT
-</button>
-
-</div>
+  <div class="controls">
+    <button class="reset" id="resetBtn">↻ MULAKAN SEMULA</button>
+    <button class="logout" id="logoutBtn">🚪 LOGOUT</button>
+  </div>
 
 </div>
 
 </section>
-
 </main>
 
 <div class="complete-screen" id="completeScreen">
-
-<div class="complete-card">
-
-<div class="trophy">🏆</div>
-
-<h2>FASA STORAGE SELESAI!</h2>
-
-<p id="finalResult"></p>
-
-<button onclick="restartSimulation()">
-  🔄 ULANG SIMULASI
-</button>
-
-</div>
+  <div class="complete-card">
+    <div style="font-size:4rem">🏆</div>
+    <h2>V3D SELESAI!</h2>
+    <p id="finalResult"></p>
+    <button onclick="location.reload()">🔄 ULANG SIMULASI</button>
+  </div>
 </div>
 
 <script>
@@ -1571,155 +1202,146 @@ const studentData =
 JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
 
 if(!studentData){
-  window.location.href = "index.html";
+  location.href = "index.html";
 }
 
 if(studentData){
-
-  document.getElementById("studentName").textContent =
-  studentData.name;
-
-  document.getElementById("studentInfo").textContent =
-  studentData.id + " • " + studentData.className;
+  studentName.textContent = studentData.name;
+  studentInfo.textContent =
+    studentData.id + " • " + studentData.className;
 }
 
 const steps = [
-
 {
   part:"cpu",
   title:"Pasang CPU",
-  text:"Pilih CPU dan pasangkan pada CPU Socket motherboard.",
-  tip:"Pastikan tanda segi tiga CPU sejajar dengan penanda socket. Jangan paksa CPU masuk.",
-  installed:'<div class="install-hardware cpu">CPU</div>'
+  text:"Pasangkan CPU pada CPU Socket.",
+  tip:"Pastikan tanda segi tiga CPU sejajar dengan tanda socket.",
+  installed:'<div class="install cpu">CPU</div>'
 },
-
 {
   part:"thermal",
   title:"Sapukan Thermal Paste",
-  text:"Sapukan sedikit thermal paste pada bahagian tengah permukaan CPU.",
-  tip:"Gunakan thermal paste kira-kira sebesar biji kacang sahaja.",
+  text:"Sapukan thermal paste pada bahagian tengah CPU.",
+  tip:"Gunakan sedikit sahaja, kira-kira sebesar biji kacang.",
   installed:'<div class="thermal-installed"></div>'
 },
-
 {
   part:"cooler",
   title:"Pasang CPU Cooler",
-  text:"Pasangkan CPU cooler di atas CPU yang telah mempunyai thermal paste.",
+  text:"Pasang CPU cooler di atas CPU.",
   tip:"Pastikan heatsink duduk rata dan diketatkan secara seimbang.",
   installed:'<div class="cooler-installed">CPU FAN</div>'
 },
-
 {
   part:"ram",
   title:"Pasang RAM",
-  text:"Pasangkan modul RAM pada slot DIMM motherboard.",
-  tip:"Pastikan takuk RAM sejajar dengan takuk slot DIMM.",
-  installed:'<div class="install-hardware ram"></div>'
+  text:"Pasang RAM pada slot DIMM.",
+  tip:"Pastikan takuk modul RAM sejajar dengan slot.",
+  installed:'<div class="install ram">RAM</div>'
 },
-
 {
   part:"m2",
   title:"Pasang M.2 NVMe SSD",
-  text:"Pasangkan M.2 NVMe SSD pada slot M.2 motherboard.",
-  tip:"Masukkan secara menyerong kemudian tekan dan kunci menggunakan skru.",
-  installed:'<div class="install-hardware m2">M.2 NVMe</div>'
+  text:"Pasang M.2 NVMe pada slot M.2.",
+  tip:"Masukkan secara menyerong kemudian kunci dengan skru.",
+  installed:'<div class="install m2">M.2</div>'
 },
-
 {
   part:"gpu",
   title:"Pasang Graphics Card",
-  text:"Pasangkan kad grafik pada slot PCIe x16 motherboard.",
-  tip:"Pastikan GPU masuk sepenuhnya dan pengunci PCIe terkunci.",
-  installed:'<div class="install-hardware gpu">GRAPHICS CARD</div>'
+  text:"Pasang GPU pada slot PCIe x16.",
+  tip:"Pastikan kad grafik masuk sepenuhnya.",
+  installed:'<div class="install gpu">GPU</div>'
 },
-
 {
   part:"ssd",
   title:"Pasang SSD SATA",
-  text:"Pasangkan SSD SATA 2.5 inci pada SSD Bay.",
-  tip:"SSD SATA memerlukan dua sambungan: SATA Data dan SATA Power.",
-  installed:'<div class="install-hardware ssd">SSD SATA</div>'
+  text:"Pasang SSD SATA pada SSD Bay.",
+  tip:"SSD SATA memerlukan SATA Data dan SATA Power.",
+  installed:'<div class="install ssd">SSD</div>'
 },
-
 {
   part:"psu",
-  title:"Pasang Power Supply Unit",
-  text:"Pasangkan PSU pada PSU Bay.",
-  tip:"Pastikan PSU dipasang kukuh dan kipas mempunyai aliran udara yang sesuai.",
-  installed:'<div class="install-hardware psu">POWER SUPPLY</div>'
+  title:"Pasang PSU",
+  text:"Pasang PSU pada PSU Bay.",
+  tip:"Pastikan PSU dipasang kukuh.",
+  installed:'<div class="install psu">PSU</div>'
 },
-
 {
   part:"atx24",
-  title:"Sambungkan Kabel 24-pin ATX",
-  text:"Sambungkan kabel utama 24-pin daripada PSU kepada motherboard.",
-  tip:"Penyambung 24-pin biasanya berada di bahagian kanan motherboard.",
-  installed:'<div class="power-plug">24-PIN</div>'
+  title:"Sambungkan 24-pin ATX",
+  text:"Sambungkan kabel 24-pin ATX ke motherboard.",
+  tip:"Ini ialah sumber kuasa utama motherboard.",
+  installed:'<div class="install">24-PIN</div>'
 },
-
 {
   part:"cpu8",
-  title:"Sambungkan Kabel 8-pin CPU / EPS",
-  text:"Sambungkan kabel CPU 8-pin/EPS kepada penyambung kuasa CPU.",
-  tip:"Jangan tertukar kabel CPU/EPS dengan kabel PCIe untuk GPU.",
-  installed:'<div class="cpu-power-plug">CPU 8-PIN</div>'
+  title:"Sambungkan 8-pin CPU / EPS",
+  text:"Sambungkan kabel CPU/EPS ke motherboard.",
+  tip:"Jangan tertukar dengan kabel PCIe GPU.",
+  installed:'<div class="install">CPU 8-PIN</div>'
 },
-
 {
   part:"satadata",
-  title:"Sambungkan Kabel SATA Data",
-  text:"Pilih kabel SATA Data dan sambungkan SSD SATA kepada port SATA pada motherboard.",
-  tip:"SATA Data ialah kabel data yang lebih kecil dan menghubungkan SSD/HDD terus ke motherboard.",
-  installed:'<div class="sata-data-installed">SATA DATA</div>'
+  title:"Sambungkan SATA Data",
+  text:"Sambungkan SSD ke port SATA motherboard.",
+  tip:"SATA Data membawa data, bukan kuasa.",
+  installed:'<div class="install install-sata-data">SATA DATA</div>'
 },
-
 {
   part:"satapower",
-  title:"Sambungkan Kabel SATA Power",
-  text:"Pilih kabel SATA Power daripada PSU dan sambungkan kepada SSD SATA.",
-  tip:"SATA Power datang daripada PSU dan membekalkan kuasa elektrik kepada SSD. Jangan tertukar dengan SATA Data.",
-  installed:'<div class="sata-power-installed">SATA POWER</div>'
+  title:"Sambungkan SATA Power",
+  text:"Sambungkan PSU ke SSD menggunakan SATA Power.",
+  tip:"SATA Power membekalkan kuasa kepada SSD.",
+  installed:'<div class="install install-sata-power">SATA POWER</div>'
+},
+{
+  part:"gpupower",
+  title:"Sambungkan PCIe GPU Power",
+  text:"Sambungkan kabel PCIe 6+2 pin daripada PSU kepada GPU.",
+  tip:"GPU berprestasi tinggi memerlukan sambungan kuasa tambahan PCIe.",
+  installed:'<div class="install install-gpu-power">GPU 6+2</div>'
+},
+{
+  part:"cpufan",
+  title:"Sambungkan CPU Fan",
+  text:"Sambungkan kabel kipas CPU kepada header CPU_FAN.",
+  tip:"CPU cooler yang tidak disambungkan ke CPU_FAN boleh menyebabkan CPU terlalu panas.",
+  installed:'<div class="install install-fan">CPU_FAN</div>'
+},
+{
+  part:"frontpanel",
+  title:"Sambungkan Power SW",
+  text:"Sambungkan kabel Power Switch casing kepada header Front Panel motherboard.",
+  tip:"Power SW membolehkan butang kuasa casing menghidupkan komputer.",
+  installed:'<div class="install install-front">PWR SW</div>'
 }
-
 ];
 
 let currentStep = 0;
 let score = 0;
 let mistakes = 0;
 let selectedPart = null;
-
 let startTime = Date.now();
-let timerInterval;
 
-const parts =
-document.querySelectorAll(".part");
-
-const slots =
-document.querySelectorAll(".slot");
-
-const feedback =
-document.getElementById("feedback");
+const parts = document.querySelectorAll(".part");
+const slots = document.querySelectorAll(".slot");
+const feedback = document.getElementById("feedback");
 
 function updateInstruction(){
 
   const step = steps[currentStep];
-
   if(!step) return;
 
-  document.getElementById("stepNumber").textContent =
-  "LANGKAH " + (currentStep + 1) + " / " + steps.length;
+  stepNumber.textContent =
+    "LANGKAH " + (currentStep + 1) + " / " + steps.length;
 
-  document.getElementById("instructionTitle").textContent =
-  step.title;
-
-  document.getElementById("instructionText").textContent =
-  step.text;
-
-  document.getElementById("tipText").textContent =
-  step.tip;
+  instructionTitle.textContent = step.title;
+  instructionText.textContent = step.text;
+  tipText.textContent = step.tip;
 
   slots.forEach(slot=>{
-
     slot.classList.remove("ready");
 
     if(
@@ -1728,232 +1350,157 @@ function updateInstruction(){
     ){
       slot.classList.add("ready");
     }
-
   });
-
 }
 
 parts.forEach(part=>{
+  part.onclick = ()=>{
 
-  part.addEventListener("click",()=>{
-
-    if(part.classList.contains("installed")){
-      return;
-    }
+    if(part.classList.contains("installed")) return;
 
     parts.forEach(p=>p.classList.remove("active"));
 
     part.classList.add("active");
-
     selectedPart = part.dataset.part;
 
     feedback.className = "feedback";
-
     feedback.textContent =
-    "🔧 " +
-    part.querySelector("strong").textContent +
-    " dipilih. Sekarang pilih lokasi pemasangan atau sambungan yang betul.";
-
-  });
-
+      "🔧 " +
+      part.querySelector("strong").textContent +
+      " dipilih. Pilih lokasi yang betul.";
+  };
 });
 
 slots.forEach(slot=>{
+  slot.onclick = ()=>{
 
-  slot.addEventListener("click",()=>{
-
-    if(slot.classList.contains("correct")){
-      return;
-    }
+    if(slot.classList.contains("correct")) return;
 
     if(!selectedPart){
-
-      feedback.className =
-      "feedback error";
-
+      feedback.className = "feedback error";
       feedback.textContent =
-      "⚠️ Pilih komponen atau kabel terlebih dahulu.";
-
+        "⚠️ Pilih komponen atau kabel terlebih dahulu.";
       return;
     }
 
-    const expectedPart =
-    steps[currentStep].part;
-
-    const selectedSlot =
-    slot.dataset.slot;
+    const expected = steps[currentStep].part;
 
     if(
-      selectedPart === expectedPart &&
-      selectedSlot === expectedPart
+      selectedPart === expected &&
+      slot.dataset.slot === expected
     ){
-
-      installCorrect(slot);
-
+      correctInstall(slot);
     }else{
-
-      installWrong(slot);
-
+      wrongInstall(slot);
     }
-
-  });
-
+  };
 });
 
-function installCorrect(slot){
+function correctInstall(slot){
 
-  const step =
-  steps[currentStep];
+  const step = steps[currentStep];
 
   slot.classList.remove("ready");
   slot.classList.add("correct");
   slot.innerHTML = step.installed;
 
-  const selectedElement =
-  document.querySelector(
-    '.part[data-part="' +
-    selectedPart +
-    '"]'
-  );
+  const item =
+    document.querySelector(
+      '.part[data-part="' + selectedPart + '"]'
+    );
 
-  selectedElement.classList.remove("active");
-  selectedElement.classList.add("installed");
+  item.classList.remove("active");
+  item.classList.add("installed");
 
   score += 100;
 
-  feedback.className =
-  "feedback success";
-
+  feedback.className = "feedback success";
   feedback.textContent =
-  "✅ BETUL! " +
-  step.title +
-  " berjaya.";
+    "✅ BETUL! " + step.title + " berjaya.";
 
   selectedPart = null;
-
   currentStep++;
 
   updateStatus();
 
   if(currentStep >= steps.length){
-
     finishSimulation();
-
   }else{
-
     setTimeout(()=>{
-
-      feedback.className =
-      "feedback";
-
+      feedback.className = "feedback";
       feedback.textContent =
-      "➡️ Teruskan ke langkah seterusnya.";
-
+        "➡️ Teruskan ke langkah seterusnya.";
       updateInstruction();
-
-    },650);
-
+    },600);
   }
-
 }
 
-function installWrong(slot){
+function wrongInstall(slot){
 
   mistakes++;
-
-  score =
-  Math.max(0,score - 20);
+  score = Math.max(0,score - 20);
 
   slot.classList.add("wrong");
 
-  feedback.className =
-  "feedback error";
-
+  feedback.className = "feedback error";
   feedback.textContent =
-  "❌ Pemasangan atau sambungan tidak tepat. Semak arahan dan cuba lagi.";
+    "❌ Sambungan tidak tepat. Semak arahan dan cuba lagi.";
 
   updateStatus();
 
   setTimeout(()=>{
     slot.classList.remove("wrong");
   },500);
-
 }
 
 function updateStatus(){
 
-  document.getElementById("score").textContent =
-  score;
+  document.getElementById("score").textContent = score;
+  document.getElementById("mistakes").textContent = mistakes;
 
-  document.getElementById("mistakes").textContent =
-  mistakes;
+  progressText.textContent =
+    currentStep + " / " + steps.length + " langkah";
 
-  document.getElementById("progressText").textContent =
-  currentStep +
-  " / " +
-  steps.length +
-  " langkah";
-
-  document.getElementById("progress").style.width =
-  (currentStep / steps.length * 100) + "%";
-
+  progress.style.width =
+    (currentStep / steps.length * 100) + "%";
 }
 
-function startTimer(){
+setInterval(()=>{
 
-  timerInterval =
-  setInterval(()=>{
+  const seconds =
+    Math.floor((Date.now() - startTime) / 1000);
 
-    const seconds =
-    Math.floor(
-      (Date.now() - startTime) / 1000
-    );
+  const min =
+    String(Math.floor(seconds / 60)).padStart(2,"0");
 
-    const min =
-    String(
-      Math.floor(seconds / 60)
-    ).padStart(2,"0");
+  const sec =
+    String(seconds % 60).padStart(2,"0");
 
-    const sec =
-    String(
-      seconds % 60
-    ).padStart(2,"0");
+  timer.textContent = min + ":" + sec;
 
-    document.getElementById("timer").textContent =
-    min + ":" + sec;
-
-  },1000);
-
-}
+},1000);
 
 function finishSimulation(){
 
-  clearInterval(timerInterval);
+  progress.style.width = "100%";
 
-  document.getElementById("progress").style.width =
-  "100%";
-
-  const time =
-  document.getElementById("timer").textContent;
+  const time = timer.textContent;
 
   const accuracy =
-  Math.max(
-    0,
     Math.round(
       (steps.length /
       (steps.length + mistakes)) * 100
-    )
-  );
+    );
 
   const result = {
     name:studentData.name,
     id:studentData.id,
     className:studentData.className,
-    score:score,
-    mistakes:mistakes,
-    accuracy:accuracy,
-    time:time,
-    version:"V3C",
+    score,
+    mistakes,
+    accuracy,
+    time,
+    version:"V3D",
     completedAt:new Date().toISOString()
   };
 
@@ -1962,85 +1509,34 @@ function finishSimulation(){
     JSON.stringify(result)
   );
 
-  document.getElementById("finalResult").innerHTML =
+  finalResult.innerHTML =
+    "Tahniah <strong>" +
+    studentData.name +
+    "</strong>!<br><br>" +
+    "Semua komponen dan sambungan utama telah selesai.<br><br>" +
+    "Skor: <strong>" + score + "</strong><br>" +
+    "Ketepatan: <strong>" + accuracy + "%</strong><br>" +
+    "Kesalahan: <strong>" + mistakes + "</strong><br>" +
+    "Masa: <strong>" + time + "</strong>";
 
-  "Tahniah <strong>" +
-  studentData.name +
-  "</strong>!<br><br>" +
-
-  "Pemasangan komponen, kuasa motherboard dan sambungan storan telah selesai.<br><br>" +
-
-  "Skor: <strong>" +
-  score +
-  "</strong><br>" +
-
-  "Ketepatan: <strong>" +
-  accuracy +
-  "%</strong><br>" +
-
-  "Kesalahan: <strong>" +
-  mistakes +
-  "</strong><br>" +
-
-  "Masa: <strong>" +
-  time +
-  "</strong>";
-
-  document.getElementById(
-    "completeScreen"
-  ).style.display =
-  "flex";
-
+  completeScreen.style.display = "flex";
 }
 
-function restartSimulation(){
-  location.reload();
-}
-
-document.getElementById(
-  "resetBtn"
-).addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      confirm(
-        "Mulakan semula simulasi?"
-      )
-    ){
-      location.reload();
-    }
-
+resetBtn.onclick = ()=>{
+  if(confirm("Mulakan semula simulasi?")){
+    location.reload();
   }
-);
+};
 
-document.getElementById(
-  "logoutBtn"
-).addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      confirm(
-        "Anda pasti mahu logout?"
-      )
-    ){
-
-      localStorage.removeItem(
-        STORAGE_KEY
-      );
-
-      window.location.href =
-      "index.html";
-
-    }
-
+logoutBtn.onclick = ()=>{
+  if(confirm("Anda pasti mahu logout?")){
+    localStorage.removeItem(STORAGE_KEY);
+    location.href = "index.html";
   }
-);
+};
 
 updateInstruction();
 updateStatus();
-startTimer();
 
 </script>
 
