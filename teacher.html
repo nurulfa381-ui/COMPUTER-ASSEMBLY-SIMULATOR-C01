@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Dashboard | Computer Assembly Simulator C01</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#061327;
+  --panel:#0d2447;
+  --panel2:#102e58;
+  --cyan:#32d7ff;
+  --green:#37df83;
+  --orange:#ff9f1a;
+  --red:#ff6262;
+  --white:#f5f9ff;
+  --muted:#abc1dd;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Poppins',sans-serif;
+  background:
+    radial-gradient(circle at top right,#113966 0%,transparent 28%),
+    radial-gradient(circle at bottom left,#0b3156 0%,transparent 30%),
+    linear-gradient(135deg,#051226,#071a35 65%,#051329);
+  color:var(--white);
+}
+
+header{
+  min-height:88px;
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  background:rgba(4,16,35,.97);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.brand h1{
+  font:800 1.3rem 'Montserrat',sans-serif;
+}
+
+.brand h1 span{
+  color:var(--cyan);
+}
+
+.brand p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:.72rem;
+}
+
+.live{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 13px;
+  border-radius:999px;
+  background:#102e58;
+  font-size:.72rem;
+  color:#cfe7ff;
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 15px var(--green);
+}
+
+main{
+  width:min(1550px,100%);
+  margin:auto;
+  padding:22px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.card{
+  padding:16px;
+  border-radius:18px;
+  background:rgba(13,36,71,.96);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.card small{
+  display:block;
+  color:var(--muted);
+  font-size:.66rem;
+  margin-bottom:5px;
+}
+
+.card strong{
+  display:block;
+  font:800 1.35rem 'Montserrat',sans-serif;
+}
+
+.total strong{color:var(--cyan);}
+.active strong{color:var(--orange);}
+.done strong{color:var(--green);}
+.exit strong{color:var(--red);}
+.avg strong{color:#d6c1ff;}
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+
+.search{
+  flex:1;
+  min-width:250px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0b2343;
+  color:white;
+  outline:none;
+  font-family:'Poppins';
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:11px 13px;
+  font:700 .7rem 'Poppins';
+  cursor:pointer;
+}
+
+.refresh{
+  background:#17416c;
+  color:white;
+}
+
+.export{
+  background:var(--green);
+  color:#082519;
+}
+
+.clear-filter{
+  background:#3a2f13;
+  color:#ffd98c;
+}
+
+.table-wrap{
+  overflow:auto;
+  border-radius:20px;
+  background:rgba(13,36,71,.97);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1250px;
+}
+
+thead{
+  background:#102e58;
+}
+
+th{
+  padding:13px 10px;
+  text-align:left;
+  font-size:.65rem;
+  color:#d7e7f8;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  position:sticky;
+  top:0;
+  background:#102e58;
+  z-index:2;
+}
+
+td{
+  padding:12px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:.67rem;
+  color:#d4e3f4;
+  vertical-align:middle;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.02);
+}
+
+.student-name{
+  font-weight:700;
+  color:white;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 9px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:.60rem;
+  white-space:nowrap;
+}
+
+.status-active{
+  background:rgba(255,159,26,.15);
+  color:#ffc96f;
+  border:1px solid rgba(255,159,26,.35);
+}
+
+.status-done{
+  background:rgba(55,223,131,.15);
+  color:#93ffc0;
+  border:1px solid rgba(55,223,131,.35);
+}
+
+.status-exit{
+  background:rgba(255,98,98,.14);
+  color:#ffaaaa;
+  border:1px solid rgba(255,98,98,.35);
+}
+
+.status-other{
+  background:rgba(50,215,255,.12);
+  color:#9debff;
+  border:1px solid rgba(50,215,255,.3);
+}
+
+.progress-cell{
+  min-width:150px;
+}
+
+.progressbar{
+  width:100%;
+  height:7px;
+  background:#07172d;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:5px;
+}
+
+.progressbar span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--orange),var(--green));
+}
+
+.empty{
+  padding:40px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.8rem;
+}
+
+.footer-note{
+  margin-top:14px;
+  color:#91a9c3;
+  font-size:.63rem;
+  line-height:1.6;
+}
+
+@media(max-width:1000px){
+  .summary{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .summary .card:last-child{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:600px){
+  header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  main{
+    padding:12px;
+  }
+
+  .summary{
+    grid-template-columns:1fr 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+  <h1>👩‍🏫 TEACHER <span>DASHBOARD</span></h1>
+  <p>COMPUTER ASSEMBLY SIMULATOR C01 • V5 ACTIVITY TRACKING</p>
+</div>
+
+<div class="live">
+  <span class="dot"></span>
+  LIVE FIREBASE MONITORING
+</div>
+
+</header>
+
+<main>
+
+<section class="summary">
+
+<div class="card total">
+  <small>JUMLAH PELAJAR</small>
+  <strong id="totalStudents">0</strong>
+</div>
+
+<div class="card active">
+  <small>SEDANG BUAT</small>
+  <strong id="activeStudents">0</strong>
+</div>
+
+<div class="card done">
+  <small>SELESAI</small>
+  <strong id="completedStudents">0</strong>
+</div>
+
+<div class="card exit">
+  <small>KELUAR AWAL</small>
+  <strong id="exitStudents">0</strong>
+</div>
+
+<div class="card avg">
+  <small>PURATA SKOR</small>
+  <strong id="averageScore">0</strong>
+</div>
+
+</section>
+
+<section class="toolbar">
+
+<div class="search">
+  <input
+    id="searchInput"
+    type="text"
+    placeholder="Cari nama, ID, kelas atau status..."
+  >
+</div>
+
+<div class="actions">
+  <button class="refresh" id="refreshBtn">↻ REFRESH</button>
+  <button class="clear-filter" id="clearFilterBtn">✕ CLEAR FILTER</button>
+  <button class="export" id="exportBtn">⬇ EXPORT CSV</button>
+</div>
+
+</section>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+  <th>NAMA</th>
+  <th>ID</th>
+  <th>KELAS</th>
+  <th>STATUS</th>
+  <th>LANGKAH</th>
+  <th>PROGRESS</th>
+  <th>SKOR</th>
+  <th>SALAH</th>
+  <th>KETEPATAN</th>
+  <th>MASA</th>
+  <th>MULA</th>
+  <th>TAMAT</th>
+  <th>AKTIVITI TERAKHIR</th>
+</tr>
+</thead>
+
+<tbody id="studentTableBody">
+
+<tr>
+<td colspan="13" class="empty">
+Memuatkan data pelajar...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<p class="footer-note">
+Data dibaca secara langsung daripada Firebase Realtime Database:
+<code>computerAssembly/students</code>.
+</p>
+
+</main>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getAuth,
+  signInAnonymously
+} from
+"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from
+"https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCVQ3P4O1mlPl9GCznwTpX29lENmSx0uLk",
+  authDomain: "computer-system-set-up-race.firebaseapp.com",
+  databaseURL: "https://computer-system-set-up-race-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "computer-system-set-up-race",
+  storageBucket: "computer-system-set-up-race.firebasestorage.app",
+  messagingSenderId: "855710524264",
+  appId: "1:855710524264:web:c41255e00eff87aa8cacdd"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let allStudents = [];
+let currentFilter = "";
+
+const tbody =
+document.getElementById("studentTableBody");
+
+function safeText(value){
+  return String(
+    value === null || value === undefined
+    ? ""
+    : value
+  );
+}
+
+function escapeHTML(value){
+
+  return safeText(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function formatTimestamp(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const date =
+  new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+    return "-";
+  }
+
+  return date.toLocaleString(
+    "ms-MY",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    }
+  );
+
+}
+
+function statusBadge(status){
+
+  const value =
+  safeText(status).toUpperCase();
+
+  if(value === "SELESAI"){
+
+    return `
+      <span class="badge status-done">
+      🟢 SELESAI
+      </span>
+    `;
+
+  }
+
+  if(value === "SEDANG BUAT"){
+
+    return `
+      <span class="badge status-active">
+      🟡 SEDANG BUAT
+      </span>
+    `;
+
+  }
+
+  if(
+    value ===
+    "KELUAR SEBELUM SELESAI"
+  ){
+
+    return `
+      <span class="badge status-exit">
+      🔴 KELUAR AWAL
+      </span>
+    `;
+
+  }
+
+  return `
+    <span class="badge status-other">
+    ${escapeHTML(value || "BELUM DIKETAHUI")}
+    </span>
+  `;
+
+}
+
+function calculateSummary(students){
+
+  const total =
+  students.length;
+
+  const active =
+  students.filter(
+    s=>
+    safeText(s.status).toUpperCase()
+    === "SEDANG BUAT"
+  ).length;
+
+  const completed =
+  students.filter(
+    s=>
+    safeText(s.status).toUpperCase()
+    === "SELESAI"
+  ).length;
+
+  const exit =
+  students.filter(
+    s=>
+    safeText(s.status).toUpperCase()
+    === "KELUAR SEBELUM SELESAI"
+  ).length;
+
+  const totalScore =
+  students.reduce(
+    (sum,s)=>
+    sum + Number(s.score || 0),
+    0
+  );
+
+  const average =
+  total
+  ? Math.round(totalScore / total)
+  : 0;
+
+  document
+  .getElementById("totalStudents")
+  .textContent =
+  total;
+
+  document
+  .getElementById("activeStudents")
+  .textContent =
+  active;
+
+  document
+  .getElementById("completedStudents")
+  .textContent =
+  completed;
+
+  document
+  .getElementById("exitStudents")
+  .textContent =
+  exit;
+
+  document
+  .getElementById("averageScore")
+  .textContent =
+  average;
+
+}
+
+function renderTable(){
+
+  const filter =
+  currentFilter
+  .trim()
+  .toLowerCase();
+
+  const filtered =
+  allStudents.filter(student=>{
+
+    const haystack = [
+      student.name,
+      student.studentId,
+      student.className,
+      student.status
+    ]
+    .join(" ")
+    .toLowerCase();
+
+    return haystack.includes(filter);
+
+  });
+
+  calculateSummary(
+    filtered
+  );
+
+  if(!filtered.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="13" class="empty">
+          Tiada rekod pelajar ditemui.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  filtered.sort((a,b)=>{
+
+    const aTime =
+    Number(a.lastActivity || 0);
+
+    const bTime =
+    Number(b.lastActivity || 0);
+
+    return bTime - aTime;
+
+  });
+
+  tbody.innerHTML =
+  filtered.map(student=>{
+
+    const currentStep =
+    Number(student.currentStep || 0);
+
+    const totalSteps =
+    Number(student.totalSteps || 17);
+
+    const progress =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(student.progress || 0)
+      )
+    );
+
+    const score =
+    Number(student.score || 0);
+
+    const mistakes =
+    Number(student.mistakes || 0);
+
+    const accuracy =
+    student.accuracy === undefined
+    ? "-"
+    : student.accuracy + "%";
+
+    const time =
+    student.time || "-";
+
+    return `
+      <tr>
+
+        <td class="student-name">
+          ${escapeHTML(student.name || "-")}
+        </td>
+
+        <td>
+          ${escapeHTML(student.studentId || "-")}
+        </td>
+
+        <td>
+          ${escapeHTML(student.className || "-")}
+        </td>
+
+        <td>
+          ${statusBadge(student.status)}
+        </td>
+
+        <td>
+          ${currentStep} / ${totalSteps}
+        </td>
+
+        <td class="progress-cell">
+          <strong>${progress}%</strong>
+
+          <div class="progressbar">
+            <span style="width:${progress}%"></span>
+          </div>
+        </td>
+
+        <td>
+          ${score}
+        </td>
+
+        <td>
+          ${mistakes}
+        </td>
+
+        <td>
+          ${accuracy}
+        </td>
+
+        <td>
+          ${escapeHTML(time)}
+        </td>
+
+        <td>
+          ${formatTimestamp(student.startedAt)}
+        </td>
+
+        <td>
+          ${formatTimestamp(student.completedAt)}
+        </td>
+
+        <td>
+          ${formatTimestamp(student.lastActivity)}
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
+
+}
+
+async function startDashboard(){
+
+  try{
+
+    if(!auth.currentUser){
+      await signInAnonymously(auth);
+    }
+
+    const studentsRef =
+    ref(
+      db,
+      "computerAssembly/students"
+    );
+
+    onValue(
+      studentsRef,
+      snapshot=>{
+
+        const data =
+        snapshot.val() || {};
+
+        allStudents =
+        Object.entries(data)
+        .map(([key,value])=>({
+          firebaseKey:key,
+          ...(value || {})
+        }));
+
+        renderTable();
+
+      },
+      error=>{
+
+        console.error(
+          "Firebase read error:",
+          error
+        );
+
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="13" class="empty">
+              ❌ Gagal membaca data Firebase.
+            </td>
+          </tr>
+        `;
+
+      }
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Teacher Dashboard error:",
+      error
+    );
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="13" class="empty">
+          ❌ Gagal login Firebase.
+        </td>
+      </tr>
+    `;
+
+  }
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener(
+"input",
+event=>{
+
+  currentFilter =
+  event.target.value;
+
+  renderTable();
+
+});
+
+document
+.getElementById("clearFilterBtn")
+.addEventListener(
+"click",
+()=>{
+
+  currentFilter = "";
+
+  document
+  .getElementById("searchInput")
+  .value = "";
+
+  renderTable();
+
+});
+
+document
+.getElementById("refreshBtn")
+.addEventListener(
+"click",
+()=>{
+
+  location.reload();
+
+});
+
+document
+.getElementById("exportBtn")
+.addEventListener(
+"click",
+()=>{
+
+  if(!allStudents.length){
+
+    alert(
+      "Tiada data untuk dieksport."
+    );
+
+    return;
+  }
+
+  const rows = [
+
+    [
+      "Nama",
+      "ID",
+      "Kelas",
+      "Status",
+      "Langkah",
+      "Progress",
+      "Skor",
+      "Kesalahan",
+      "Ketepatan",
+      "Masa",
+      "Mula",
+      "Tamat",
+      "Aktiviti Terakhir"
+    ],
+
+    ...allStudents.map(student=>[
+
+      student.name || "",
+      student.studentId || "",
+      student.className || "",
+      student.status || "",
+
+      (
+        Number(student.currentStep || 0)
+        + " / "
+        + Number(student.totalSteps || 17)
+      ),
+
+      Number(student.progress || 0)
+      + "%",
+
+      Number(student.score || 0),
+
+      Number(student.mistakes || 0),
+
+      student.accuracy === undefined
+      ? ""
+      : student.accuracy + "%",
+
+      student.time || "",
+
+      formatTimestamp(
+        student.startedAt
+      ),
+
+      formatTimestamp(
+        student.completedAt
+      ),
+
+      formatTimestamp(
+        student.lastActivity
+      )
+
+    ])
+
+  ];
+
+  const csv =
+  rows
+  .map(row=>
+    row.map(value=>{
+
+      const text =
+      String(value ?? "");
+
+      return '"' +
+      text.replace(/"/g,'""') +
+      '"';
+
+    }).join(",")
+  )
+  .join("\n");
+
+  const blob =
+  new Blob(
+    ["\uFEFF" + csv],
+    {
+      type:
+      "text/csv;charset=utf-8;"
+    }
+  );
+
+  const url =
+  URL.createObjectURL(blob);
+
+  const link =
+  document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+  "computer-assembly-student-activity.csv";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+});
+
+startDashboard();
+
+</script>
+
+</body>
+</html>
