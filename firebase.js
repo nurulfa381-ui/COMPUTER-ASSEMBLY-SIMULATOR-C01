@@ -26,28 +26,13 @@ import {
    ========================================================= */
 
 const firebaseConfig = {
-
-  apiKey:
-  "AIzaSyCVQ3P4O1mlPl9GCznwTpX29lENmSx0uLk",
-
-  authDomain:
-  "computer-system-set-up-race.firebaseapp.com",
-
-  databaseURL:
-  "https://computer-system-set-up-race-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-  projectId:
-  "computer-system-set-up-race",
-
-  storageBucket:
-  "computer-system-set-up-race.firebasestorage.app",
-
-  messagingSenderId:
-  "855710524264",
-
-  appId:
-  "1:855710524264:web:c41255e00eff87aa8cacdd"
-
+  apiKey: "AIzaSyCVQ3P4O1mlPl9GCznwTpX29lENmSx0uLk",
+  authDomain: "computer-system-set-up-race.firebaseapp.com",
+  databaseURL: "https://computer-system-set-up-race-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "computer-system-set-up-race",
+  storageBucket: "computer-system-set-up-race.firebasestorage.app",
+  messagingSenderId: "855710524264",
+  appId: "1:855710524264:web:c41255e00eff87aa8cacdd"
 };
 
 
@@ -55,20 +40,15 @@ const firebaseConfig = {
    INITIALIZE FIREBASE
    ========================================================= */
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
+const auth = getAuth(app);
 
-const db =
-getDatabase(app);
+const db = getDatabase(app);
 
 
 /* =========================================================
    SAFE STUDENT ID
-   Firebase key tidak boleh mengandungi:
-   . # $ [ ]
    ========================================================= */
 
 function safeKey(value){
@@ -82,7 +62,6 @@ function safeKey(value){
 
 /* =========================================================
    ANONYMOUS AUTHENTICATION
-   Pelajar tidak perlu akaun Firebase.
    ========================================================= */
 
 async function ensureFirebaseLogin(){
@@ -100,7 +79,7 @@ async function ensureFirebaseLogin(){
 
 
 /* =========================================================
-   START / ENTER SIMULATOR
+   START SESSION
    ========================================================= */
 
 export async function startAssemblySession(
@@ -123,63 +102,58 @@ export async function startAssemblySession(
       studentId
     );
 
-    await update(
-      studentRef,
-      {
+    await update(studentRef,{
+      name:
+      studentData.name || "Pelajar",
 
-        name:
-        studentData.name || "Pelajar",
+      studentId:
+      studentData.id || "",
 
-        studentId:
-        studentData.id || "",
+      className:
+      studentData.className || "",
 
-        className:
-        studentData.className || "",
+      firebaseUid:
+      user.uid,
 
-        firebaseUid:
-        user.uid,
+      entered:
+      true,
 
-        entered:
-        true,
+      status:
+      "SEDANG BUAT",
 
-        status:
-        "SEDANG BUAT",
+      currentStep:
+      0,
 
-        currentStep:
-        0,
+      totalSteps:
+      totalSteps,
 
-        totalSteps:
-        totalSteps,
+      progress:
+      0,
 
-        progress:
-        0,
+      score:
+      0,
 
-        score:
-        0,
+      mistakes:
+      0,
 
-        mistakes:
-        0,
+      startedAt:
+      serverTimestamp(),
 
-        startedAt:
-        serverTimestamp(),
+      lastActivity:
+      serverTimestamp(),
 
-        lastActivity:
-        serverTimestamp(),
+      completed:
+      false,
 
-        completed:
-        false,
+      completedAt:
+      null,
 
-        completedAt:
-        null,
+      resultStatus:
+      "BELUM SELESAI",
 
-        resultStatus:
-        "BELUM SELESAI",
-
-        simulatorVersion:
-        "V5 ACTIVITY TRACKING"
-
-      }
-    );
+      simulatorVersion:
+      "V5 ACTIVITY TRACKING"
+    });
 
     console.log(
       "✅ Firebase: sesi pelajar direkodkan."
@@ -204,7 +178,6 @@ export async function startAssemblySession(
 
 /* =========================================================
    UPDATE PROGRESS
-   Dipanggil setiap kali langkah berjaya.
    ========================================================= */
 
 export async function updateAssemblyProgress(
@@ -237,35 +210,30 @@ export async function updateAssemblyProgress(
       studentId
     );
 
-    await update(
-      studentRef,
-      {
+    await update(studentRef,{
+      status:
+      currentStep >= totalSteps
+      ? "SELESAI"
+      : "SEDANG BUAT",
 
-        status:
-        currentStep >= totalSteps
-        ? "SELESAI"
-        : "SEDANG BUAT",
+      currentStep:
+      currentStep,
 
-        currentStep:
-        currentStep,
+      totalSteps:
+      totalSteps,
 
-        totalSteps:
-        totalSteps,
+      progress:
+      progress,
 
-        progress:
-        progress,
+      score:
+      score,
 
-        score:
-        score,
+      mistakes:
+      mistakes,
 
-        mistakes:
-        mistakes,
-
-        lastActivity:
-        serverTimestamp()
-
-      }
-    );
+      lastActivity:
+      serverTimestamp()
+    });
 
     return true;
 
@@ -308,61 +276,56 @@ export async function completeAssemblySession(
       studentId
     );
 
-    await update(
-      studentRef,
-      {
+    await update(studentRef,{
+      name:
+      studentData.name || "Pelajar",
 
-        name:
-        studentData.name || "Pelajar",
+      studentId:
+      studentData.id || "",
 
-        studentId:
-        studentData.id || "",
+      className:
+      studentData.className || "",
 
-        className:
-        studentData.className || "",
+      status:
+      "SELESAI",
 
-        status:
-        "SELESAI",
+      currentStep:
+      totalSteps,
 
-        currentStep:
-        totalSteps,
+      totalSteps:
+      totalSteps,
 
-        totalSteps:
-        totalSteps,
+      progress:
+      100,
 
-        progress:
-        100,
+      score:
+      result.score || 0,
 
-        score:
-        result.score || 0,
+      mistakes:
+      result.mistakes || 0,
 
-        mistakes:
-        result.mistakes || 0,
+      accuracy:
+      result.accuracy || 0,
 
-        accuracy:
-        result.accuracy || 0,
+      time:
+      result.time || "00:00",
 
-        time:
-        result.time || "00:00",
+      completed:
+      true,
 
-        completed:
-        true,
+      resultStatus:
+      result.status ||
+      "POST SUCCESS / BOOT SUCCESS",
 
-        resultStatus:
-        result.status ||
-        "POST SUCCESS / BOOT SUCCESS",
+      completedAt:
+      serverTimestamp(),
 
-        completedAt:
-        serverTimestamp(),
+      lastActivity:
+      serverTimestamp(),
 
-        lastActivity:
-        serverTimestamp(),
-
-        simulatorVersion:
-        "V5 ACTIVITY TRACKING"
-
-      }
-    );
+      simulatorVersion:
+      "V5 ACTIVITY TRACKING"
+    });
 
     console.log(
       "✅ Firebase: simulasi selesai direkodkan."
@@ -386,7 +349,7 @@ export async function completeAssemblySession(
 
 
 /* =========================================================
-   LOGOUT / KELUAR SEBELUM SELESAI
+   LOGOUT / EXIT
    ========================================================= */
 
 export async function markAssemblyExit(
@@ -416,35 +379,30 @@ export async function markAssemblyExit(
       studentId
     );
 
-    await update(
-      studentRef,
-      {
+    await update(studentRef,{
+      status:
+      currentStep >= totalSteps
+      ? "SELESAI"
+      : "KELUAR SEBELUM SELESAI",
 
-        status:
-        currentStep >= totalSteps
-        ? "SELESAI"
-        : "KELUAR SEBELUM SELESAI",
+      currentStep:
+      currentStep,
 
-        currentStep:
-        currentStep,
+      totalSteps:
+      totalSteps,
 
-        totalSteps:
-        totalSteps,
+      progress:
+      progress,
 
-        progress:
-        progress,
+      score:
+      score,
 
-        score:
-        score,
+      mistakes:
+      mistakes,
 
-        mistakes:
-        mistakes,
-
-        lastActivity:
-        serverTimestamp()
-
-      }
-    );
+      lastActivity:
+      serverTimestamp()
+    });
 
     return true;
 
