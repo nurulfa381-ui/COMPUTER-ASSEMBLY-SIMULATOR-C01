@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>V4 FINAL | Computer Assembly Simulator C01</title>
+<title>V5 | Computer Assembly Simulator C01</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1016,7 +1016,7 @@ button{
 
 <div class="brand">
   <h1>🖥️ COMPUTER <span>ASSEMBLY</span> SIMULATOR</h1>
-  <p>IT-020-3:2013-C01 • V4 FINAL • Pemasangan & Pengujian Komputer</p>
+  <p>IT-020-3:2013-C01 • V5 ACTIVITY TRACKING • Pemasangan & Pengujian Komputer</p>
 </div>
 
 <div class="student">
@@ -1173,7 +1173,7 @@ button{
 
 <div class="bench-label">
   <span>⚠️ ESD SAFE WORK AREA</span>
-  <span>V4 FINAL TRAINING SYSTEM</span>
+  <span>V5 ACTIVITY TRACKING</span>
 </div>
 
 <div class="pc-case">
@@ -1394,30 +1394,55 @@ Anda telah berjaya memasang dan menghidupkan sistem komputer.
 ✅ POST SUCCESS • BOOT SUCCESS • SISTEM BERFUNGSI
 </div>
 
-<button onclick="location.reload()">
+<button id="repeatBtn">
 🔄 ULANG SIMULASI
 </button>
 
 </div>
 </div>
 
-<script>
+<script type="module">
+
+/* =========================================================
+   FIREBASE V5
+   ========================================================= */
+
+import {
+  startAssemblySession,
+  updateAssemblyProgress,
+  completeAssemblySession,
+  markAssemblyExit
+} from "./firebase.js";
+
+
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
 
 const STORAGE_KEY = "c01_assembly_student";
 const RESULT_KEY = "c01_assembly_result";
 
 const studentData =
-JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+JSON.parse(
+  localStorage.getItem(STORAGE_KEY) || "null"
+);
 
 if(!studentData){
   location.href = "index.html";
 }
 
 document.getElementById("studentName").textContent =
-studentData.name;
+studentData.name || "Pelajar";
 
 document.getElementById("studentInfo").textContent =
-studentData.id + " • " + studentData.className;
+(studentData.id || "-") +
+" • " +
+(studentData.className || "-");
+
+
+/* =========================================================
+   STEPS
+   ========================================================= */
 
 const steps = [
 
@@ -1559,12 +1584,20 @@ installed:'<div class="install power-ok">⏻ POWER ON</div>'
 
 ];
 
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
 let currentStep = 0;
 let score = 0;
 let mistakes = 0;
 let selectedPart = null;
+
 let startTime = Date.now();
-let timerInterval;
+let timerInterval = null;
+
+let simulationCompleted = false;
 
 const parts =
 document.querySelectorAll(".part");
@@ -1575,564 +1608,892 @@ document.querySelectorAll(".slot");
 const feedback =
 document.getElementById("feedback");
 
+
+/* =========================================================
+   FIREBASE - REGISTER ENTRY
+   ========================================================= */
+
+async function registerStudentEntry(){
+
+  try{
+
+    const success =
+    await startAssemblySession(
+      studentData,
+      steps.length
+    );
+
+    if(success){
+
+      console.log(
+        "✅ V5: Pelajar berjaya direkodkan dalam Firebase."
+      );
+
+    }else{
+
+      console.warn(
+        "⚠️ V5: Simulator berjalan tetapi rekod Firebase gagal."
+      );
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "❌ V5 registerStudentEntry:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FIREBASE - UPDATE
+   ========================================================= */
+
+function syncProgress(){
+
+  updateAssemblyProgress(
+    studentData,
+    currentStep,
+    steps.length,
+    score,
+    mistakes
+  ).catch(error=>{
+
+    console.error(
+      "❌ Firebase progress sync:",
+      error
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   INSTRUCTION
+   ========================================================= */
+
 function updateInstruction(){
 
-const step = steps[currentStep];
+  const step =
+  steps[currentStep];
 
-if(!step) return;
+  if(!step){
+    return;
+  }
 
-document.getElementById("stepNumber").textContent =
-"LANGKAH " +
-(currentStep + 1) +
-" / " +
-steps.length;
+  document.getElementById("stepNumber").textContent =
+  "LANGKAH " +
+  (currentStep + 1) +
+  " / " +
+  steps.length;
 
-document.getElementById("instructionTitle").textContent =
-step.title;
+  document.getElementById("instructionTitle").textContent =
+  step.title;
 
-document.getElementById("instructionText").textContent =
-step.text;
+  document.getElementById("instructionText").textContent =
+  step.text;
 
-document.getElementById("tipText").textContent =
-step.tip;
+  document.getElementById("tipText").textContent =
+  step.tip;
 
-slots.forEach(slot=>{
+  slots.forEach(slot=>{
 
-slot.classList.remove("ready");
+    slot.classList.remove("ready");
 
-if(
-slot.dataset.slot === step.part &&
-!slot.classList.contains("correct")
-){
-slot.classList.add("ready");
+    if(
+      slot.dataset.slot === step.part &&
+      !slot.classList.contains("correct")
+    ){
+
+      slot.classList.add("ready");
+
+    }
+
+  });
+
+  if(step.part === "inspection"){
+
+    document
+    .getElementById("checklist")
+    .classList.add("show");
+
+  }else{
+
+    document
+    .getElementById("checklist")
+    .classList.remove("show");
+
+  }
+
 }
 
-});
 
-if(step.part === "inspection"){
-document.getElementById("checklist").classList.add("show");
-}else{
-document.getElementById("checklist").classList.remove("show");
-}
-
-}
+/* =========================================================
+   SELECT PART
+   ========================================================= */
 
 parts.forEach(part=>{
 
-part.addEventListener("click",()=>{
+  part.addEventListener("click",()=>{
 
-if(part.classList.contains("installed")){
-return;
-}
+    if(
+      part.classList.contains("installed")
+    ){
+      return;
+    }
 
-parts.forEach(p=>p.classList.remove("active"));
+    parts.forEach(
+      p=>p.classList.remove("active")
+    );
 
-part.classList.add("active");
+    part.classList.add("active");
 
-selectedPart =
-part.dataset.part;
+    selectedPart =
+    part.dataset.part;
 
-feedback.className =
-"feedback";
+    feedback.className =
+    "feedback";
 
-feedback.textContent =
-"🔧 " +
-part.querySelector("strong").textContent +
-" dipilih. Pilih lokasi atau tindakan yang betul.";
+    feedback.textContent =
+    "🔧 " +
+    part.querySelector("strong").textContent +
+    " dipilih. Pilih lokasi atau tindakan yang betul.";
+
+  });
 
 });
 
-});
+
+/* =========================================================
+   SELECT SLOT
+   ========================================================= */
 
 slots.forEach(slot=>{
 
-slot.addEventListener("click",()=>{
+  slot.addEventListener("click",()=>{
 
-if(slot.classList.contains("correct")){
-return;
-}
+    if(
+      slot.classList.contains("correct")
+    ){
+      return;
+    }
 
-if(!selectedPart){
+    if(!selectedPart){
 
-feedback.className =
-"feedback error";
+      feedback.className =
+      "feedback error";
 
-feedback.textContent =
-"⚠️ Pilih komponen, kabel atau tindakan terlebih dahulu.";
+      feedback.textContent =
+      "⚠️ Pilih komponen, kabel atau tindakan terlebih dahulu.";
 
-return;
-}
+      return;
+    }
 
-const expected =
-steps[currentStep].part;
+    const expected =
+    steps[currentStep].part;
 
-if(
-selectedPart === expected &&
-slot.dataset.slot === expected
-){
+    if(
+      selectedPart === expected &&
+      slot.dataset.slot === expected
+    ){
 
-correctAction(slot);
+      correctAction(slot);
 
-}else{
+    }else{
 
-wrongAction(slot);
+      wrongAction(slot);
 
-}
+    }
+
+  });
 
 });
 
-});
+
+/* =========================================================
+   CORRECT ACTION
+   ========================================================= */
 
 function correctAction(slot){
 
-const step =
-steps[currentStep];
+  const step =
+  steps[currentStep];
 
-slot.classList.remove("ready");
+  slot.classList.remove("ready");
 
-slot.classList.add("correct");
+  slot.classList.add("correct");
 
-slot.innerHTML =
-step.installed;
+  slot.innerHTML =
+  step.installed;
 
-const item =
-document.querySelector(
-'.part[data-part="' +
-selectedPart +
-'"]'
-);
+  const item =
+  document.querySelector(
+    '.part[data-part="' +
+    selectedPart +
+    '"]'
+  );
 
-item.classList.remove("active");
-item.classList.add("installed");
+  if(item){
 
-score += 100;
+    item.classList.remove("active");
+    item.classList.add("installed");
 
-feedback.className =
-"feedback success";
+  }
 
-feedback.textContent =
-"✅ BETUL! " +
-step.title +
-" berjaya.";
+  score += 100;
 
-selectedPart = null;
+  feedback.className =
+  "feedback success";
 
-currentStep++;
+  feedback.textContent =
+  "✅ BETUL! " +
+  step.title +
+  " berjaya.";
 
-updateStatus();
+  selectedPart = null;
 
-if(step.part === "inspection"){
+  currentStep++;
 
-playSuccessTone();
+  updateStatus();
+
+  /* REKOD KE FIREBASE */
+  syncProgress();
+
+  if(step.part === "inspection"){
+    playSuccessTone();
+  }
+
+  if(step.part === "power"){
+
+    powerOnSequence();
+
+    return;
+  }
+
+  if(currentStep < steps.length){
+
+    setTimeout(()=>{
+
+      feedback.className =
+      "feedback";
+
+      feedback.textContent =
+      "➡️ Teruskan ke langkah seterusnya.";
+
+      updateInstruction();
+
+    },600);
+
+  }
 
 }
 
-if(step.part === "power"){
 
-powerOnSequence();
-
-return;
-
-}
-
-if(currentStep < steps.length){
-
-setTimeout(()=>{
-
-feedback.className =
-"feedback";
-
-feedback.textContent =
-"➡️ Teruskan ke langkah seterusnya.";
-
-updateInstruction();
-
-},600);
-
-}
-
-}
+/* =========================================================
+   WRONG ACTION
+   ========================================================= */
 
 function wrongAction(slot){
 
-mistakes++;
+  mistakes++;
 
-score =
-Math.max(0,score - 20);
+  score =
+  Math.max(
+    0,
+    score - 20
+  );
 
-slot.classList.add("wrong");
+  slot.classList.add("wrong");
 
-feedback.className =
-"feedback error";
+  feedback.className =
+  "feedback error";
 
-feedback.textContent =
-"❌ Tidak tepat. Semak arahan dan cuba lagi.";
+  feedback.textContent =
+  "❌ Tidak tepat. Semak arahan dan cuba lagi.";
 
-updateStatus();
+  updateStatus();
 
-playErrorTone();
+  playErrorTone();
 
-setTimeout(()=>{
+  /* REKOD KESALAHAN KE FIREBASE */
+  syncProgress();
 
-slot.classList.remove("wrong");
+  setTimeout(()=>{
 
-},500);
+    slot.classList.remove("wrong");
+
+  },500);
 
 }
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
 
 function updateStatus(){
 
-document.getElementById("score").textContent =
-score;
+  document.getElementById("score").textContent =
+  score;
 
-document.getElementById("mistakes").textContent =
-mistakes;
+  document.getElementById("mistakes").textContent =
+  mistakes;
 
-document.getElementById("progressText").textContent =
-currentStep +
-" / " +
-steps.length +
-" langkah";
+  document.getElementById("progressText").textContent =
+  currentStep +
+  " / " +
+  steps.length +
+  " langkah";
 
-document.getElementById("progress").style.width =
-(currentStep / steps.length * 100) + "%";
+  document.getElementById("progress").style.width =
+  (
+    currentStep /
+    steps.length *
+    100
+  ) +
+  "%";
 
 }
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
 
 function startTimer(){
 
-timerInterval =
-setInterval(()=>{
+  timerInterval =
+  setInterval(()=>{
 
-const seconds =
-Math.floor(
-(Date.now() - startTime) / 1000
-);
+    const seconds =
+    Math.floor(
+      (
+        Date.now() -
+        startTime
+      ) /
+      1000
+    );
 
-const min =
-String(
-Math.floor(seconds / 60)
-).padStart(2,"0");
+    const min =
+    String(
+      Math.floor(
+        seconds / 60
+      )
+    ).padStart(2,"0");
 
-const sec =
-String(
-seconds % 60
-).padStart(2,"0");
+    const sec =
+    String(
+      seconds % 60
+    ).padStart(2,"0");
 
-document.getElementById("timer").textContent =
-min + ":" + sec;
+    document
+    .getElementById("timer")
+    .textContent =
+    min + ":" + sec;
 
-},1000);
+  },1000);
 
 }
+
+
+/* =========================================================
+   AUDIO
+   ========================================================= */
 
 function playTone(
-frequency,
-duration,
-type="sine",
-volume=.05
+  frequency,
+  duration,
+  type="sine",
+  volume=.05
 ){
 
-try{
+  try{
 
-const AudioContext =
-window.AudioContext ||
-window.webkitAudioContext;
+    const AudioContext =
+    window.AudioContext ||
+    window.webkitAudioContext;
 
-const ctx =
-new AudioContext();
+    const ctx =
+    new AudioContext();
 
-const oscillator =
-ctx.createOscillator();
+    const oscillator =
+    ctx.createOscillator();
 
-const gain =
-ctx.createGain();
+    const gain =
+    ctx.createGain();
 
-oscillator.type =
-type;
+    oscillator.type =
+    type;
 
-oscillator.frequency.value =
-frequency;
+    oscillator.frequency.value =
+    frequency;
 
-gain.gain.value =
-volume;
+    gain.gain.value =
+    volume;
 
-oscillator.connect(gain);
+    oscillator.connect(gain);
 
-gain.connect(
-ctx.destination
-);
+    gain.connect(
+      ctx.destination
+    );
 
-oscillator.start();
+    oscillator.start();
 
-setTimeout(()=>{
+    setTimeout(()=>{
 
-oscillator.stop();
+      oscillator.stop();
 
-ctx.close();
+      ctx.close();
 
-},duration);
+    },duration);
 
-}catch(error){}
+  }
+  catch(error){
+
+    console.warn(
+      "Audio unavailable:",
+      error
+    );
+
+  }
 
 }
+
 
 function playSuccessTone(){
 
-playTone(
-660,
-120,
-"sine",
-.04
-);
+  playTone(
+    660,
+    120,
+    "sine",
+    .04
+  );
 
-setTimeout(()=>{
+  setTimeout(()=>{
 
-playTone(
-880,
-160,
-"sine",
-.04
-);
+    playTone(
+      880,
+      160,
+      "sine",
+      .04
+    );
 
-},130);
+  },130);
 
 }
+
 
 function playErrorTone(){
 
-playTone(
-170,
-180,
-"sawtooth",
-.025
-);
+  playTone(
+    170,
+    180,
+    "sawtooth",
+    .025
+  );
 
 }
+
 
 function playPostBeep(){
 
-playTone(
-1000,
-160,
-"sine",
-.05
-);
+  playTone(
+    1000,
+    160,
+    "sine",
+    .05
+  );
 
 }
+
+
+/* =========================================================
+   POWER ON
+   ========================================================= */
 
 function powerOnSequence(){
 
-clearInterval(
-timerInterval
-);
+  clearInterval(
+    timerInterval
+  );
 
-document.getElementById("progress").style.width =
-"100%";
+  document
+  .getElementById("progress")
+  .style.width =
+  "100%";
 
-document.getElementById("powerLed").classList.add("on");
+  document
+  .getElementById("powerLed")
+  .classList.add("on");
 
-const screen =
-document.getElementById("monitorScreen");
+  const screen =
+  document.getElementById(
+    "monitorScreen"
+  );
 
-screen.className =
-"screen boot";
+  screen.className =
+  "screen boot";
 
-screen.innerHTML =
-"POWER ON...";
+  screen.innerHTML =
+  "POWER ON...";
 
-playPostBeep();
+  playPostBeep();
 
-setTimeout(()=>{
 
-screen.innerHTML =
-"POST INITIALIZING...<br>" +
-"CPU ............. OK<br>" +
-"MEMORY .......... OK";
+  setTimeout(()=>{
 
-},700);
+    screen.innerHTML =
+    "POST INITIALIZING...<br>" +
+    "CPU ............. OK<br>" +
+    "MEMORY .......... OK";
 
-setTimeout(()=>{
+  },700);
 
-screen.innerHTML +=
-"<br>NVMe SSD ......... OK<br>" +
-"SATA SSD ......... OK<br>" +
-"GPU .............. OK";
 
-},1500);
+  setTimeout(()=>{
 
-setTimeout(()=>{
+    screen.innerHTML +=
+    "<br>NVMe SSD ......... OK<br>" +
+    "SATA SSD ......... OK<br>" +
+    "GPU .............. OK";
 
-screen.innerHTML +=
-"<br><br>POST SUCCESS ✓";
+  },1500);
 
-playSuccessTone();
 
-},2300);
+  setTimeout(()=>{
 
-setTimeout(()=>{
+    screen.innerHTML +=
+    "<br><br>POST SUCCESS ✓";
 
-screen.innerHTML =
-"POST SUCCESS ✓<br><br>" +
-"BOOT DEVICE FOUND<br>" +
-"Loading Operating System...";
+    playSuccessTone();
 
-},3000);
+  },2300);
 
-setTimeout(()=>{
 
-screen.innerHTML =
-"✓ COMPUTER SYSTEM READY<br><br>" +
-"BOOT SUCCESS<br>" +
-"C01 TRAINING SYSTEM";
+  setTimeout(()=>{
 
-const cpuFan =
-document.getElementById("cpuFanVisual");
+    screen.innerHTML =
+    "POST SUCCESS ✓<br><br>" +
+    "BOOT DEVICE FOUND<br>" +
+    "Loading Operating System...";
 
-if(cpuFan){
-cpuFan.classList.add("spin");
-}
+  },3000);
 
-const gpuFan =
-document.getElementById("gpuFanVisual");
 
-if(gpuFan){
-gpuFan.classList.add("spin");
-}
+  setTimeout(()=>{
 
-finishSimulation();
+    screen.innerHTML =
+    "✓ COMPUTER SYSTEM READY<br><br>" +
+    "BOOT SUCCESS<br>" +
+    "C01 TRAINING SYSTEM";
 
-},4200);
+    const cpuFan =
+    document.getElementById(
+      "cpuFanVisual"
+    );
 
-}
+    if(cpuFan){
 
-function finishSimulation(){
+      cpuFan.classList.add(
+        "spin"
+      );
 
-const time =
-document.getElementById("timer").textContent;
+    }
 
-const accuracy =
-Math.max(
-0,
-Math.round(
-(steps.length /
-(steps.length + mistakes))
-* 100
-)
-);
+    const gpuFan =
+    document.getElementById(
+      "gpuFanVisual"
+    );
 
-const result = {
+    if(gpuFan){
 
-name:
-studentData.name,
+      gpuFan.classList.add(
+        "spin"
+      );
 
-id:
-studentData.id,
+    }
 
-className:
-studentData.className,
+    finishSimulation();
 
-score:
-score,
-
-mistakes:
-mistakes,
-
-accuracy:
-accuracy,
-
-time:
-time,
-
-status:
-"POST SUCCESS / BOOT SUCCESS",
-
-version:
-"V4 FINAL",
-
-completedAt:
-new Date().toISOString()
-
-};
-
-localStorage.setItem(
-RESULT_KEY,
-JSON.stringify(result)
-);
-
-document.getElementById("resultName").textContent =
-studentData.name;
-
-document.getElementById("resultId").textContent =
-studentData.id;
-
-document.getElementById("resultScore").textContent =
-score;
-
-document.getElementById("resultAccuracy").textContent =
-accuracy + "%";
-
-document.getElementById("resultMistakes").textContent =
-mistakes;
-
-document.getElementById("resultTime").textContent =
-time;
-
-setTimeout(()=>{
-
-document.getElementById(
-"completeScreen"
-).style.display =
-"flex";
-
-},1400);
+  },4200);
 
 }
 
-document.getElementById(
-"resetBtn"
-).addEventListener(
+
+/* =========================================================
+   FINISH SIMULATION
+   ========================================================= */
+
+async function finishSimulation(){
+
+  simulationCompleted =
+  true;
+
+  const time =
+  document
+  .getElementById("timer")
+  .textContent;
+
+  const accuracy =
+  Math.max(
+    0,
+    Math.round(
+      (
+        steps.length /
+        (
+          steps.length +
+          mistakes
+        )
+      ) *
+      100
+    )
+  );
+
+  const result = {
+
+    name:
+    studentData.name,
+
+    id:
+    studentData.id,
+
+    className:
+    studentData.className,
+
+    score:
+    score,
+
+    mistakes:
+    mistakes,
+
+    accuracy:
+    accuracy,
+
+    time:
+    time,
+
+    status:
+    "POST SUCCESS / BOOT SUCCESS",
+
+    version:
+    "V5 ACTIVITY TRACKING",
+
+    completedAt:
+    new Date().toISOString()
+
+  };
+
+
+  /* SIMPAN LOCAL */
+
+  localStorage.setItem(
+    RESULT_KEY,
+    JSON.stringify(result)
+  );
+
+
+  /* SIMPAN FIREBASE */
+
+  try{
+
+    await completeAssemblySession(
+      studentData,
+      result,
+      steps.length
+    );
+
+    console.log(
+      "✅ Keputusan akhir Firebase berjaya."
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "❌ Final Firebase error:",
+      error
+    );
+
+  }
+
+
+  document
+  .getElementById("resultName")
+  .textContent =
+  studentData.name;
+
+  document
+  .getElementById("resultId")
+  .textContent =
+  studentData.id;
+
+  document
+  .getElementById("resultScore")
+  .textContent =
+  score;
+
+  document
+  .getElementById("resultAccuracy")
+  .textContent =
+  accuracy + "%";
+
+  document
+  .getElementById("resultMistakes")
+  .textContent =
+  mistakes;
+
+  document
+  .getElementById("resultTime")
+  .textContent =
+  time;
+
+
+  setTimeout(()=>{
+
+    document
+    .getElementById(
+      "completeScreen"
+    )
+    .style.display =
+    "flex";
+
+  },1400);
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+document
+.getElementById("resetBtn")
+.addEventListener(
 "click",
-()=>{
+async ()=>{
 
-if(
-confirm(
-"Mulakan semula keseluruhan simulasi?"
-)
-){
+  if(
+    confirm(
+      "Mulakan semula keseluruhan simulasi?"
+    )
+  ){
 
-location.reload();
+    if(!simulationCompleted){
 
-}
+      try{
+
+        await markAssemblyExit(
+          studentData,
+          currentStep,
+          steps.length,
+          score,
+          mistakes
+        );
+
+      }
+      catch(error){
+
+        console.error(
+          "Reset Firebase error:",
+          error
+        );
+
+      }
+
+    }
+
+    location.reload();
+
+  }
 
 });
 
-document.getElementById(
-"logoutBtn"
-).addEventListener(
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+document
+.getElementById("logoutBtn")
+.addEventListener(
+"click",
+async ()=>{
+
+  if(
+    confirm(
+      "Anda pasti mahu logout?"
+    )
+  ){
+
+    if(!simulationCompleted){
+
+      try{
+
+        await markAssemblyExit(
+          studentData,
+          currentStep,
+          steps.length,
+          score,
+          mistakes
+        );
+
+      }
+      catch(error){
+
+        console.error(
+          "Logout Firebase error:",
+          error
+        );
+
+      }
+
+    }
+
+    localStorage.removeItem(
+      STORAGE_KEY
+    );
+
+    location.href =
+    "index.html";
+
+  }
+
+});
+
+
+/* =========================================================
+   ULANG SIMULASI
+   ========================================================= */
+
+document
+.getElementById("repeatBtn")
+.addEventListener(
 "click",
 ()=>{
 
-if(
-confirm(
-"Anda pasti mahu logout?"
-)
-){
-
-localStorage.removeItem(
-STORAGE_KEY
-);
-
-location.href =
-"index.html";
-
-}
+  location.reload();
 
 });
+
+
+/* =========================================================
+   START V5
+   ========================================================= */
 
 updateInstruction();
+
 updateStatus();
+
 startTimer();
+
+/* INI YANG MEMBUAT computerAssembly MUNCUL */
+registerStudentEntry();
 
 </script>
 
